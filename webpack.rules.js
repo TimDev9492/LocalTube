@@ -26,4 +26,16 @@ module.exports = [
       },
     },
   },
+  {
+    test: /\.(png|lua)$/,
+    use: [
+      {
+        options: {
+          name: "[name].[ext]",
+          outputPath: "assets/"
+        },
+        loader: "file-loader"
+      }
+    ]
+  },
 ];

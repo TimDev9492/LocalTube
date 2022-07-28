@@ -28,3 +28,5 @@
 
 import './index.css';
 import './App';
+
+document.documentElement.classList.add('dark');
