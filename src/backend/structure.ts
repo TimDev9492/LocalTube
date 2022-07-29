@@ -2,7 +2,6 @@ import { PathLike } from "original-fs";
 
 export interface MainConfig {
     shows: LocalShow[];
-    thumbnailDir: PathLike;
 }
 
 export interface LocalShow {
@@ -10,19 +9,20 @@ export interface LocalShow {
     fileConfig: FileConfig;
     isConventionalShow: boolean;
     content: LocalShowContent | LocalVideo[];
+    metadata: LocalShowMetadata;
 }
 
 export interface LocalShowContent {
-    metadata: LocalShowMetadata;
-    [season: number]: LocalSeason;
+    [season: string]: LocalSeason;
 }
 
 export interface LocalSeason {
-    [episode: number]: LocalVideo;
+    [episode: string]: LocalVideo;
 }
 
 export interface LocalVideo {
     path: PathLike;
+    title: string;
     metadata: LocalVideoMetadata;
 }
 
