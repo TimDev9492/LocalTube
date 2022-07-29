@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
 
 export default function PageContent(): JSX.Element {
     return <div className="dark:bg-slate-700 flex items-center justify-center flex-1 p-16">

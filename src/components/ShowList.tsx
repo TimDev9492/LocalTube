@@ -1,5 +1,4 @@
 import * as React from 'react';
-import placeholder from '../../assets/harddisk.png';
 
 interface ShowInfo {
     title: string;
