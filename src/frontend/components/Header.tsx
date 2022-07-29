@@ -1,7 +1,7 @@
 import * as React from 'react';
-import localtubeIcon from '../../assets/localtube_icon.png';
+import localtubeIcon from '../../../assets/localtube_icon.png';
 import { ShowList } from './ShowList';
-import placeholder from '../../assets/harddisk.png';
+import placeholder from '../../../assets/harddisk.png';
 
 const shows = [
     {

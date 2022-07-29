@@ -1,32 +1,32 @@
 import { PathLike } from "original-fs";
 
-interface MainConfig {
+export interface MainConfig {
     shows: LocalShow[];
     thumbnailDir: PathLike;
 }
 
-interface LocalShow {
+export interface LocalShow {
     dir: PathLike;
     fileConfig: FileConfig;
     isConventionalShow: boolean;
     content: LocalShowContent | LocalVideo[];
 }
 
-interface LocalShowContent {
+export interface LocalShowContent {
     metadata: LocalShowMetadata;
     [season: number]: LocalSeason;
 }
 
-interface LocalSeason {
+export interface LocalSeason {
     [episode: number]: LocalVideo;
 }
 
-interface LocalVideo {
+export interface LocalVideo {
     path: PathLike;
     metadata: LocalVideoMetadata;
 }
 
-interface LocalShowMetadata {
+export interface LocalShowMetadata {
     title: string;
     seasonTotal: number;
     episodeTotal: number;
@@ -34,24 +34,24 @@ interface LocalShowMetadata {
     thumbnailPath: PathLike;
 }
 
-interface FileConfig {
+export interface FileConfig {
     fileExtensions: string[];
     ignoreSubDirs: boolean;
     regExtract: RegExtractConfig;
 }
 
-interface LocalVideoMetadata {
+export interface LocalVideoMetadata {
     thumbnailPath: PathLike;
     timePos: number;
     duration: number;
 }
 
-interface RegExtractConfig {
+export interface RegExtractConfig {
     regex: RegExp;
     matchingGroups: MatchingGroupConfig;
 }
 
-interface MatchingGroupConfig {
+export interface MatchingGroupConfig {
     season: number;
     episode: number;
     title: number;
