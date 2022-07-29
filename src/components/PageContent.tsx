@@ -2,65 +2,59 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
 export default function PageContent(): JSX.Element {
-    return <div className="dark:bg-slate-700 flex items-center justify-center flex-1">
+    return <div className="dark:bg-slate-700 flex items-center justify-center flex-1 p-16">
         <ShowAccordion />
     </div>
 }
 
+const OpenItemsContext: React.Context<Set<number>> = React.createContext<Set<number>>(new Set<number>());
+
 function ShowAccordion(): JSX.Element {
-    const [accordionIndex, setAccordionIndex] = React.useState(null);
+    const [isAnimated, setAnimated] = React.useState<boolean>(false);
 
     return <div className="w-4/5 rounded">
-        <AccordionItem index={0} setAccordionIndex={setAccordionIndex} accordionIndex={accordionIndex}>Season 1</AccordionItem>
-        <AccordionItem index={1} setAccordionIndex={setAccordionIndex} accordionIndex={accordionIndex}>Season 2</AccordionItem>
-        <AccordionItem index={2} setAccordionIndex={setAccordionIndex} accordionIndex={accordionIndex}>Season 3</AccordionItem>
-        <AccordionItem index={3} setAccordionIndex={setAccordionIndex} accordionIndex={accordionIndex}>Season 4</AccordionItem>
-        <AccordionItem index={4} setAccordionIndex={setAccordionIndex} accordionIndex={accordionIndex}>Season 5</AccordionItem>
+        <AccordionItem index={0} isAnimated={isAnimated} setAnimated={setAnimated}>Season 1</AccordionItem>
+        <AccordionItem index={1} isAnimated={isAnimated} setAnimated={setAnimated}>Season 2</AccordionItem>
+        <AccordionItem index={2} isAnimated={isAnimated} setAnimated={setAnimated}>Season 3</AccordionItem>
+        <AccordionItem index={3} isAnimated={isAnimated} setAnimated={setAnimated}>Season 4</AccordionItem>
+        <AccordionItem index={4} isAnimated={isAnimated} setAnimated={setAnimated}>Season 5</AccordionItem>
     </div>
 }
 
-function AccordionItem({ index, setAccordionIndex, accordionIndex, children }: { index: number, setAccordionIndex: Function, accordionIndex: number, children: any }): JSX.Element {
+function AccordionItem({ index, children, isAnimated, setAnimated }: { index: number, children: any, isAnimated: boolean, setAnimated: Function }): JSX.Element {
     const self = React.useRef();
     const [isLoaded, setLoaded] = React.useState<boolean>(false);
-    const [isDisplayed, setDisplayed] = React.useState<boolean>(false);
+    const [offsetHeight, setOffsetHeight] = React.useState<number>(null);
+    const openItems = React.useContext(OpenItemsContext);
 
+    let animationTimeout: NodeJS.Timeout = null;
     const animationTimeMs = 100;
 
     React.useEffect(() => {
-        self.current && (self.current as any).offsetHeight !== undefined && setLoaded(true);
+        if (self.current && (self.current as any).offsetHeight !== undefined) {
+            setLoaded(true);
+            setOffsetHeight((self.current as any).offsetHeight);
+        }
     }, [self.current]);
 
-    React.useEffect(() => {
-        isLoaded && setTimeout(() => setDisplayed(true), animationTimeMs);
-    }, [isLoaded]);
+    window.addEventListener('resize', () => self.current && setOffsetHeight((self.current as any).offsetHeight));
 
-    return <>
-        <div className={["fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2", isDisplayed && "invisible"].join(' ')}>
-            <svg role="status" className="inline h-32 w-32 animate-spin mr-2 text-gray-200 dark:text-gray-600 fill-slate-500"
-                viewBox="0 0 100 101" fill="none">
-                <path
-                    d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                    fill="currentColor" />
-                <path
-                    d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                    fill="currentFill" />
-            </svg>
+    const onClickEvent = () => {
+        if (animationTimeout) clearTimeout(animationTimeout);
+        setAnimated(true);
+        animationTimeout = setTimeout(() => {
+            setAnimated(false);
+        }, animationTimeMs);
+        openItems.has(index) ? openItems.delete(index) : openItems.add(index);
+    };
+
+    return <div className="flex flex-col text-white overflow-hidden">
+        <div className="w-full flex justify-between items-center dark:bg-slate-800 py-2 px-4 z-10" onClick={onClickEvent}>
+            <h1 className="font-medium text-2xl">{children}</h1>
+            <h1 className="text-6xl">{ openItems.has(index) ? '-' : '+' }</h1>
         </div>
-        <div className={["flex flex-col text-white overflow-hidden", !isDisplayed && "invisible"].join(' ')}>
-            <div className="w-full flex justify-between items-center dark:bg-slate-800 py-2 px-4 z-10" onClick={() => setAccordionIndex(accordionIndex === index ? null : index)}>
-                <h1 className="font-medium text-2xl">{children}</h1>
-                <h1 className="text-6xl">+</h1>
-            </div>
-            <div ref={self} className={["w-full p-4 dark:bg-slate-600", !isLoaded && "-translate-y-full"].join(' ')} style={{ transition: `margin ${animationTimeMs / 1000.0}s linear`, marginBottom: self.current && accordionIndex !== index && `-${(self.current as any).offsetHeight}px` }}>
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quas quo aperiam soluta unde tenetur iure
-                facilis non commodi, culpa distinctio explicabo ex sint voluptatibus, atque similique obcaecati ea
-                dolorem quam praesentium eveniet voluptatem beatae assumenda. Ratione asperiores voluptatum quam
-                maiores maxime harum eum voluptates molestias sunt molestiae nulla tempora aut est praesentium,
-                enim quidem minus rerum cum corporis similique? Praesentium hic placeat aliquam porro maiores.
-                Iste, fugiat, consectetur dolor dicta repellendus dolores architecto sequi vero, alias natus
-                veritatis exercitationem temporibus odit assumenda numquam esse optio laborum eaque dignissimos
-                hic. Doloribus in cumque tenetur qui culpa error vel nemo porro inventore.
-            </div>
+        <div ref={self} className={["w-full p-4 dark:bg-slate-600", !isLoaded && "-translate-y-full"].join(' ')} style={{ transition: isAnimated ? `margin ${animationTimeMs / 1000.0}s linear` : 'margin 0s', marginBottom: (self.current && !openItems.has(index)) ? `-${offsetHeight}px` : '0px' }}>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi reiciendis corporis laboriosam sint. Recusandae quisquam sapiente vel quasi a obcaecati rerum dicta. Rem quasi, unde beatae quia ea, aspernatur doloribus consectetur eaque voluptatem nam possimus nostrum temporibus tenetur iure. Ad dolorum dolore maiores! Explicabo quisquam fuga obcaecati assumenda expedita neque sed fugit deleniti nisi! Mollitia nesciunt laboriosam illum repellat vitae doloribus optio voluptate unde reprehenderit? Debitis aut iste consectetur quis, voluptates similique nam vel fugiat. Nulla molestiae officiis cum quia impedit omnis animi minima eveniet illum, nisi molestias tenetur dolore enim non error odit. Optio veritatis consequuntur ducimus, ratione ipsam facilis aliquid, cum, maiores ad saepe voluptates nulla quos obcaecati. Cum perferendis architecto, recusandae doloremque et doloribus praesentium, repellendus incidunt rerum odit obcaecati dolore nulla similique modi deserunt saepe. Vero consectetur facilis facere possimus qui, temporibus minima pariatur, omnis ducimus magnam sunt obcaecati eaque sint accusantium harum nobis optio architecto rerum tenetur quod, saepe praesentium? Placeat, saepe id. Ipsam, eaque deserunt ab asperiores inventore dolores sit eum sed! Sunt repellat sit nemo provident distinctio quod nam eius temporibus quis iure ullam aspernatur, dolorum dolor itaque consequuntur aliquam ea facere! Ex, excepturi saepe pariatur eaque quo non voluptas? Consectetur rem modi itaque quo, quibusdam culpa adipisci non, est sapiente cupiditate fugit minus odio? Explicabo eius corporis magnam. Recusandae beatae nam veniam, rem, excepturi nemo accusamus similique possimus eveniet illum quod porro repudiandae nihil placeat autem obcaecati, nulla fuga sunt alias tempore nobis maiores omnis. Unde consequuntur minima omnis a magni eos voluptatum cupiditate possimus illo ab quae corporis reprehenderit exercitationem, quas nemo quam saepe earum praesentium, eum quibusdam fuga reiciendis dolorem nihil maiores. Nulla placeat reprehenderit culpa temporibus ex quae illum assumenda, recusandae, blanditiis quo, commodi similique alias? Modi nam libero harum quaerat dolore, vitae repellendus! Cupiditate recusandae atque necessitatibus ratione.
         </div>
-    </>
+    </div>
 }
