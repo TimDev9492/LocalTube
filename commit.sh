@@ -1,7 +1,7 @@
 #!/bin/sh
 TYPE=$(gum choose "fix" "feat" "docs" "style" "refactor" "test" "chore" "revert")
 SCOPE=$(gum input --placeholder "scope")
-BREAKING_CHANGE=$(gum confirm -n "Breaking change?" && printf "!")
+BREAKING_CHANGE=$(gum confirm --default=false "Breaking change?" && printf "!")
 
 # Since the scope is optional, wrap it in parentheses if it has a value.
 [[ -n "$SCOPE" ]] && SCOPE="($SCOPE)"
