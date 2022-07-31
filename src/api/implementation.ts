@@ -3,9 +3,10 @@ import * as fs from "fs";
 import { IpcMainEvent } from "electron";
 import { LocalTubeDatabase } from "../backend/structure";
 import { DatabaseManager } from "../backend/DatabaseManager";
+import { ShowDeserializer } from "../backend/ShowDeserializer";
 
-export function handleReadFile(event: IpcMainEvent, path: PathLike): string {
-    return fs.readFileSync(path, { encoding: 'utf-8' });
+export function handleGetThumbnailBase64(event: IpcMainEvent, path: PathLike): Promise<string> {
+    return ShowDeserializer.getVideoThumbnailBase64(path);
 }
 
 export function handleGetDatabase(event: IpcMainEvent): LocalTubeDatabase {
