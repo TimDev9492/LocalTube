@@ -49,6 +49,12 @@ export interface LocalVideoMetadata {
 export interface RegExtractConfig {
     regex: RegExp;
     matchingGroups: MatchingGroupConfig;
+    titleReplace?: TitleReplaceConfig;
+}
+
+export interface TitleReplaceConfig {
+    searchValue: RegExp;
+    replaceValue: string;
 }
 
 export interface MatchingGroupConfig {
