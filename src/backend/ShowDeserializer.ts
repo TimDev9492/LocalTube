@@ -10,7 +10,7 @@ import * as commandExists from "command-exists";
 /**
  * A class for serializing objects that are useable by the API
  */
-export class ShowSerializer {
+export class ShowDeserializer {
 
     constructor() { }
 
@@ -85,13 +85,13 @@ export class ShowSerializer {
     }
 
     /**
-     * Return a serialized LocalShow object from the file system with a given configuration
+     * Return a deserialized LocalShow object from the file system with a given configuration
      * @param dirPath {PathLike} Path to the root directory of the show
      * @param fileConfig {FileConfig} File configuration for this show
      * @param isConventionalShow {boolean} Whether this show is made up of multiple seasons containing episodes
-     * @returns {LocalShow} A serialized LocalShow object as it is used in the API
+     * @returns {LocalShow} A deserialized LocalShow object as it is used in the API
      */
-    public async serializeShow(dirPath: PathLike, fileConfig: FileConfig, isConventionalShow: boolean, showTitle: string): Promise<LocalShow> {
+    public async deserializeShow(dirPath: PathLike, fileConfig: FileConfig, isConventionalShow: boolean, showTitle: string): Promise<LocalShow> {
         // instantiate LocalShow object
         let localShow: LocalShow = {
             dir: dirPath,
