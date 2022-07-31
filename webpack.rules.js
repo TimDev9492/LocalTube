@@ -27,6 +27,7 @@ module.exports = [
     },
   },
   {
+    // Move asset files to the assets folder
     test: /\.(png|lua)$/,
     use: [
       {
