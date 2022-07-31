@@ -12,19 +12,21 @@ import * as commandExists from "command-exists";
  */
 export class ShowDeserializer {
 
-    constructor() { }
+    private constructor() { }
 
     /**
      * Read a video thumbnail from jpeg as base64
      * @param absPath {PathLike} The absolute path of the video file
      * @returns A video thumbnail encoded in base64
      */
-    public getVideoThumbnailBase64(absPath: PathLike): Promise<string> {
+    public static getVideoThumbnailBase64(absPath: PathLike): Promise<string> {
         return new Promise((resolve, reject) =>
             this.createVideoThubmnailJPEG(absPath).then(
-                (thumbnailPath) => resolve(fs.readFileSync(thumbnailPath).toString('base64')),
-                (error) => reject(error)
-            ));
+                (thumbnailPath) => fs.readFile(thumbnailPath, (err, data) => {
+                    err && reject(err);
+                    data && resolve(data.toString('base64'));
+                })),
+        );
     }
 
     /**
@@ -32,7 +34,7 @@ export class ShowDeserializer {
      * @param absPath {PathLike} The absolute path of the video file
      * @returns {PathLike} The path of the generated jpeg thumbnail
      */
-    private createVideoThubmnailJPEG(absPath: PathLike, videoDuration?: number): Promise<PathLike> {
+    private static createVideoThubmnailJPEG(absPath: PathLike, videoDuration?: number): Promise<PathLike> {
         return new Promise((resolve, reject) => {
             // generate image filename
             let filename = path.basename(absPath.toString()) + '.jpg';
@@ -91,7 +93,7 @@ export class ShowDeserializer {
      * @param isConventionalShow {boolean} Whether this show is made up of multiple seasons containing episodes
      * @returns {LocalShow} A deserialized LocalShow object as it is used in the API
      */
-    public async deserializeShow(dirPath: PathLike, fileConfig: FileConfig, isConventionalShow: boolean, showTitle: string): Promise<LocalShow> {
+    public static async deserializeShow(dirPath: PathLike, fileConfig: FileConfig, isConventionalShow: boolean, showTitle: string): Promise<LocalShow> {
         // instantiate LocalShow object
         let localShow: LocalShow = {
             dir: dirPath,
@@ -149,7 +151,7 @@ export class ShowDeserializer {
      * @param absPath {PathLike} The absolute path of the video file
      * @returns A LocalVideoMetada object
      */
-    private async getVideoMetadata(absPath: PathLike): Promise<LocalVideoMetadata> {
+    private static async getVideoMetadata(absPath: PathLike): Promise<LocalVideoMetadata> {
         // get video duration via ffprobe
         let duration = await new Promise<number>((resolve, reject) => {
             ffmpeg.ffprobe(absPath.toString(), (error: any, metadata: any) => {
@@ -171,7 +173,7 @@ export class ShowDeserializer {
      * @param dirPath {PathLike} Path of the root directory
      * @param fileConfig {FileConfig} The file configuration
      */
-    private getVideoFiles(dirPath: PathLike, fileConfig: FileConfig): VideoFile[] {
+    private static getVideoFiles(dirPath: PathLike, fileConfig: FileConfig): VideoFile[] {
         let videoFiles: VideoFile[] = [];
 
         // create a queue for directories that need to get traversed
@@ -208,7 +210,7 @@ export class ShowDeserializer {
      * @param filename {string} The filename with extension
      * @returns {string} The file extension
      */
-    private getFileExtension(filename: string): string {
+    private static getFileExtension(filename: string): string {
         return filename.split('.').pop().toLowerCase();
     }
 }

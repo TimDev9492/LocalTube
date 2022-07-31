@@ -47,18 +47,25 @@ export default function Header(): JSX.Element {
                         </a>
                         <div className="hidden md:block">
                             <div className="ml-10 flex items-baseline space-x-4">
-                                <a className="text-slate-300  hover:text-slate-800 dark:hover:text-white px-3 py-2 rounded-md text-md font-medium">
-                                    Home
-                                </a>
-                                <a className="text-slate-800 dark:text-white  hover:text-slate-800 dark:hover:text-white px-3 py-2 rounded-md text-md font-medium">
-                                    Gallery
-                                </a>
-                                <a className="text-slate-300  hover:text-slate-800 dark:hover:text-white px-3 py-2 rounded-md text-md font-medium">
-                                    Content
-                                </a>
-                                <a className="text-slate-300  hover:text-slate-800 dark:hover:text-white px-3 py-2 rounded-md text-md font-medium">
-                                    Contact
-                                </a>
+                                <div className="group cursor-pointer flex items-center text-slate-300  hover:text-slate-800 dark:hover:text-white px-3 py-2 rounded-md text-md font-medium">
+                                    <svg role="add" className="inline h-4 w-4 mr-2 dark:fill-slate-300 dark:group-hover:fill-white"
+                                        viewBox="0 0 330.242 330.242" fill="none">
+                                        <path d="M324.442,129.811l-41.321-33.677V42.275c0-6.065-4.935-11-11-11h-26c-6.065,0-11,4.935-11,11v14.737l-55.213-44.999
+	c-3.994-3.254-9.258-5.047-14.822-5.047c-5.542,0-10.781,1.782-14.753,5.019L5.8,129.81c-6.567,5.351-6.173,10.012-5.354,12.314
+	c0.817,2.297,3.448,6.151,11.884,6.151h19.791v154.947c0,11.058,8.972,20.053,20,20.053h62.5c10.935,0,19.5-8.809,19.5-20.053
+	v-63.541c0-5.446,5.005-10.405,10.5-10.405h42c5.238,0,9.5,4.668,9.5,10.405v63.541c0,10.87,9.388,20.053,20.5,20.053h61.5
+	c11.028,0,20-8.996,20-20.053V148.275h19.791c8.436,0,11.066-3.854,11.884-6.151C330.615,139.822,331.009,135.161,324.442,129.811z"/>
+                                    </svg>
+                                    <a>Home</a>
+                                </div><div className="group cursor-pointer flex items-center text-slate-300  hover:text-slate-800 dark:hover:text-white px-3 py-2 rounded-md text-md font-medium">
+                                    <svg role="add" className="inline h-4 w-4 mr-2 dark:fill-slate-300 dark:group-hover:fill-white"
+                                        viewBox="0 0 60.364 60.364" fill="none">
+                                        <path d="M54.454,23.18l-18.609-0.002L35.844,5.91C35.845,2.646,33.198,0,29.934,0c-3.263,0-5.909,2.646-5.909,5.91v17.269
+		L5.91,23.178C2.646,23.179,0,25.825,0,29.088c0.002,3.264,2.646,5.909,5.91,5.909h18.115v19.457c0,3.267,2.646,5.91,5.91,5.91
+		c3.264,0,5.909-2.646,5.91-5.908V34.997h18.611c3.262,0,5.908-2.645,5.908-5.907C60.367,25.824,57.718,23.178,54.454,23.18z"/>
+                                    </svg>
+                                    <a>Add show</a>
+                                </div>
                             </div>
                         </div>
                     </div>

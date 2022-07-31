@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 @layer utilities {
+    .flex-third {
+      flex: 1 0 33%; 
+    }
+
     *::-webkit-scrollbar {
       display: none;
     }
