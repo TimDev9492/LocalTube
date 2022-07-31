@@ -1,25 +1,38 @@
 import { PathLike } from "original-fs";
-import { FileConfig, LocalSeason, LocalShow, LocalShowContent, LocalVideo, LocalVideoMetadata } from "./structure";
+import { FileConfig, LocalSeason, LocalShow, LocalShowContent, LocalShowMetadata, LocalVideo, LocalVideoMetadata } from "./structure";
 import * as fs from "fs";
 import * as path from "path";
 import { app } from "electron";
 import * as child_process from "child_process";
+import * as ffmpeg from "fluent-ffmpeg";
+import * as commandExists from "command-exists";
 
 /**
  * A class for serializing objects that are useable by the API
  */
 export class ShowSerializer {
 
-    constructor() {
-
-    }
+    constructor() { }
 
     /**
-     * Creates and returns a video thumbnail in base64
+     * Read a video thumbnail from jpeg as base64
      * @param absPath {PathLike} The absolute path of the video file
      * @returns A video thumbnail encoded in base64
      */
     public getVideoThumbnailBase64(absPath: PathLike): Promise<string> {
+        return new Promise((resolve, reject) =>
+            this.createVideoThubmnailJPEG(absPath).then(
+                (thumbnailPath) => resolve(fs.readFileSync(thumbnailPath).toString('base64')),
+                (error) => reject(error)
+            ));
+    }
+
+    /**
+     * Create a video thumbnail
+     * @param absPath {PathLike} The absolute path of the video file
+     * @returns {PathLike} The path of the generated jpeg thumbnail
+     */
+    private createVideoThubmnailJPEG(absPath: PathLike, videoDuration?: number): Promise<PathLike> {
         return new Promise((resolve, reject) => {
             // generate image filename
             let filename = path.basename(absPath.toString()) + '.jpg';
@@ -32,30 +45,53 @@ export class ShowSerializer {
             let thumbnailPath = path.join(cacheDir, filename);
 
             // return thumbnail if it is cached
-            if (fs.existsSync(thumbnailPath)) resolve(fs.readFileSync(thumbnailPath).toString('base64'));
+            if (fs.existsSync(thumbnailPath)) resolve(thumbnailPath);
 
-            // otherwise create a thumbnail using `ffmpegthumbnailer`
-            let child = child_process.spawn('ffmpegthumbnailer', ['-i', `"${absPath.toString().replace(/"/g, '\"')}"`, '-c', 'jpg', '-s', '640', '-o', `"${thumbnailPath.replace(/"/g, '\"')}"`], { shell: true });
+            // otherwise create a thumbnail
 
-            child.on('error', (error) => {
-                reject(error);
-            });
+            // check if `ffmpegthumbnailer` is installed on the system
+            commandExists.default('ffmpegthumbnailer').then((command) => {
+                // create a thumbnail using `ffmpegthumbnailer` (fast)
+                let child = child_process.spawn('ffmpegthumbnailer', ['-i', `"${absPath.toString().replace(/"/g, '\"')}"`, '-c', 'jpg', '-s', '640', '-o', `"${thumbnailPath.replace(/"/g, '\"')}"`], { shell: true });
 
-            child.on('close', (code) => {
-                if (code === 0) resolve(fs.readFileSync(thumbnailPath).toString('base64'));
-                else reject('ffmpegthumbnailer did not run correctly');
+                child.on('error', (error) => {
+                    reject(error);
+                });
+
+                child.on('close', (code) => {
+                    if (code === 0) resolve(thumbnailPath);
+                    else reject('ffmpegthumbnailer did not run correctly');
+                });
+            }).catch(() => {
+                // create a thumbnail using bundled ffmpeg (slow)
+                let command = ffmpeg.default(absPath.toString()).screenshot({
+                    timestamps: [videoDuration ? videoDuration * .1 : 0.0],
+                    size: '640x360',
+                    folder: cacheDir,
+                    filename: filename,
+                    fastSeek: true,
+                });
+
+                // set a timeout proportional to video duration,
+                // at least 1000ms or 3000ms if no duration is given
+                let timeout = setTimeout(() => reject('timed out'), Math.min(videoDuration || 3000, 1000));
+
+                command.on('end', () => {
+                    clearTimeout(timeout);
+                    resolve(thumbnailPath)
+                });
             });
         });
     }
 
     /**
-     * Returns a serialized LocalShow object from the file system with a given configuration
+     * Return a serialized LocalShow object from the file system with a given configuration
      * @param dirPath {PathLike} Path to the root directory of the show
      * @param fileConfig {FileConfig} File configuration for this show
      * @param isConventionalShow {boolean} Whether this show is made up of multiple seasons containing episodes
      * @returns {LocalShow} A serialized LocalShow object as it is used in the API
      */
-    public serializeShow(dirPath: PathLike, fileConfig: FileConfig, isConventionalShow: boolean): LocalShow {
+    public async serializeShow(dirPath: PathLike, fileConfig: FileConfig, isConventionalShow: boolean, showTitle: string): Promise<LocalShow> {
         // instantiate LocalShow object
         let localShow: LocalShow = {
             dir: dirPath,
@@ -73,12 +109,13 @@ export class ShowSerializer {
             let content: LocalShowContent = {};
 
             // loop through each videoFile
-            videoFiles.forEach(videoFile => {
+            for (const videoFile of videoFiles) {
                 // get episode info from regExtract
                 let regexMatches = videoFile.relativePath.toString().match(fileConfig.regExtract.regex);
                 let season: string = regexMatches[fileConfig.regExtract.matchingGroups.season];
                 let episode: string = regexMatches[fileConfig.regExtract.matchingGroups.episode];
                 let title: string = regexMatches[fileConfig.regExtract.matchingGroups.title];
+                if (fileConfig.regExtract.titleReplace) title = title.replace(fileConfig.regExtract.titleReplace.searchValue, fileConfig.regExtract.titleReplace.replaceValue);
 
                 if (!content[season]) content[season] = {} as LocalSeason;
 
@@ -86,33 +123,51 @@ export class ShowSerializer {
                 content[season][episode] = {
                     path: absPath,
                     title: title,
-                    metadata: this.getVideoMetadata(absPath),
+                    metadata: await this.getVideoMetadata(absPath),
                 } as LocalVideo;
-            });
+            }
+
+            // create metadata for show
+            let metadata: LocalShowMetadata = {
+                title: showTitle,
+                seasonTotal: Object.keys(content).length,
+                episodeTotal: Object.keys(content).reduce((prevEpisodeTotal: number, currentSeasonNo: string) => prevEpisodeTotal + Object.keys(content[currentSeasonNo]).length, 0),
+                totalDuration: Object.keys(content).reduce((prevTotalDuration: number, currentSeasonNo: string) => prevTotalDuration + Object.keys(content[currentSeasonNo]).reduce((prevEpisodeDuration: number, currentEpisodeNo: string) => prevEpisodeDuration + content[currentSeasonNo][currentEpisodeNo].metadata.duration, 0), 0),
+                // thumbnailPath: ((content['1'])['1'])?.metadata.thumbnailPath,
+                thumbnailPath: '',
+            };
+
+            localShow.content = content;
+            localShow.metadata = metadata;
         }
 
         return localShow;
     }
 
     /**
-     * Returns metadata of a video file
+     * Return metadata of a video file
      * @param absPath {PathLike} The absolute path of the video file
      * @returns A LocalVideoMetada object
      */
-    private getVideoMetadata(absPath: PathLike): LocalVideoMetadata {
-
-
-        let videoMetadata: LocalVideoMetadata = {
-            thumbnailPath: "",
+    private async getVideoMetadata(absPath: PathLike): Promise<LocalVideoMetadata> {
+        // get video duration via ffprobe
+        let duration = await new Promise<number>((resolve, reject) => {
+            ffmpeg.ffprobe(absPath.toString(), (error: any, metadata: any) => {
+                if (metadata)
+                    resolve(metadata.format.duration);
+                else if (error)
+                    console.error(error);
+            });
+        });
+        return {
+            thumbnailPath: await this.createVideoThubmnailJPEG(absPath, duration),
             timePos: 0,
-            duration: null,
-        };
-
-        return videoMetadata;
+            duration: duration,
+        } as LocalVideoMetadata;
     }
 
     /**
-     * Returns a list of video files that can be processed further
+     * Return a list of video files that can be processed further
      * @param dirPath {PathLike} Path of the root directory
      * @param fileConfig {FileConfig} The file configuration
      */
@@ -120,24 +175,24 @@ export class ShowSerializer {
         let videoFiles: VideoFile[] = [];
 
         // create a queue for directories that need to get traversed
-        let dirQueue: PathLike[] = [dirPath];
+        let dirQueue: PathLike[] = ['.'];
 
         // while there are directories in the queue...
         while (dirQueue.length) {
             let nextQueue: PathLike[] = [];
 
             // ...loop through each directory in the queue...
-            dirQueue.forEach(dirPath => {
+            dirQueue.forEach(relDirPath => {
 
                 // ...get the contents as specified by the FileConfig...
-                let dirContents = fs.readdirSync(dirPath, { withFileTypes: true }).filter(dirent =>
+                let dirContents = fs.readdirSync(path.join(dirPath.toString(), relDirPath.toString()), { withFileTypes: true }).filter(dirent =>
                     (!fileConfig.ignoreSubDirs && dirent.isDirectory()) ||
                     (!fileConfig.fileExtensions.length || fileConfig.fileExtensions.includes(this.getFileExtension(dirent.name))));
 
                 // ...push video files to videoFiles array and put directories into next queue...
                 dirContents.forEach(dirent => dirent.isFile() ?
-                    videoFiles.push({ relativePath: path.join(dirPath.toString(), dirent.name) } as VideoFile) :
-                    nextQueue.push(path.join(dirPath.toString(), dirent.name)));
+                    videoFiles.push({ relativePath: path.join(relDirPath.toString(), dirent.name) } as VideoFile) :
+                    nextQueue.push(path.join(relDirPath.toString(), dirent.name)));
 
             });
 
@@ -149,7 +204,7 @@ export class ShowSerializer {
     }
 
     /**
-     * Returns the file extension given a filename
+     * Return the file extension of a filename
      * @param filename {string} The filename with extension
      * @returns {string} The file extension
      */
