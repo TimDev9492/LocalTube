@@ -1,6 +1,6 @@
 import { PathLike } from "original-fs";
 
-export interface MainConfig {
+export interface LocalTubeDatabase {
     shows: LocalShow[];
 }
 
