@@ -1,4 +1,5 @@
 import { PathLike } from "original-fs";
+import { LocalTubeDatabase } from "../backend/structure";
 
 declare global {
     interface Window {
@@ -8,4 +9,5 @@ declare global {
 
 export interface LocalTubeAPI {
     readFile: (path: PathLike) => Promise<string>;
+    getDatabase: () => Promise<LocalTubeDatabase>;
 }
