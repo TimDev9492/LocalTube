@@ -1,5 +1,5 @@
 import { PathLike } from "original-fs";
-import { LocalTubeDatabase } from "./structure"
+import { LocalShow, LocalShowContent, LocalTubeDatabase, LocalVideo } from "./structure"
 import * as fs from "fs";
 import * as path from "path";
 
@@ -10,6 +10,7 @@ export class DatabaseManager {
 
     private static databasePath: PathLike;
     private static database: LocalTubeDatabase;
+    private static videoLookup: { [videoPath: string]: SeasonEpisodeInfo | LocalVideoIndex };
 
     /**
      * Private inaccessible constructor to prevent instantiating objects of this class
@@ -22,6 +23,7 @@ export class DatabaseManager {
      */
     public static setDatabasePath(path: PathLike) {
         DatabaseManager.databasePath = path;
+        DatabaseManager.videoLookup = {};
     }
 
     /**
@@ -55,7 +57,7 @@ export class DatabaseManager {
     public static saveDatabase() {
         // check if path is set
         if (!DatabaseManager.databasePath) throw new Error('Database path not set. Set the path using `DatabaseManager.setDatabasePath(path: PathLike)`');
-        
+
         // write serialized JSON object to disk
         fs.writeFileSync(DatabaseManager.databasePath, JSON.stringify(DatabaseManager.database));
     }
@@ -68,4 +70,63 @@ export class DatabaseManager {
         return DatabaseManager.database;
     }
 
+    /**
+     * Store a new timepos for a video file in the database and save the database
+     * @param videoPath {PathLike} The absolute path of the video file
+     * @param timePos The new timepos
+     */
+    public static updateVideoTimePos(videoPath: PathLike, timePos: number) {
+        let ri: SeasonEpisodeInfo | LocalVideoIndex = null;
+        if (Object.keys(DatabaseManager.videoLookup).includes(videoPath.toString())) {
+            ri = DatabaseManager.videoLookup[videoPath.toString()];
+        } else {
+            ri = DatabaseManager.getLocalVideoRI(videoPath);
+        }
+        if (ri === null) return;
+        if ('index' in ri) {
+            // resource identifier is of type LocalVideoIndex
+            (DatabaseManager.database.shows[ri.showIndex].content as LocalVideo[])[ri.index].metadata.timePos = timePos;
+        } else {
+            // resource identifier is of type SeasonEpisodeInfo
+            (DatabaseManager.database.shows[ri.showIndex].content as LocalShowContent)[ri.season][ri.episode].metadata.timePos = timePos;
+        }
+        DatabaseManager.saveDatabase();
+    }
+
+    /**
+     * Retrieve a LocalVideo resource identifier from the database with the specified file path
+     * @param videoPath {PathLike} The absolute path of the video file
+     * @returns {SeasonEpisodeInfo | LocalVideoIndex} A LocalVideo Resource Identifier
+     */
+    private static getLocalVideoRI(videoPath: PathLike): SeasonEpisodeInfo | LocalVideoIndex {
+        for (let i = 0; i < DatabaseManager.database.shows.length; i++) {
+            let show = DatabaseManager.database.shows[i];
+            if (show.isConventionalShow) {
+                for (const seasonNo of Object.keys(show.content as LocalShowContent)) {
+                    for (const episodeNo of Object.keys((show.content as LocalShowContent)[seasonNo])) {
+                        if ((show.content as LocalShowContent)[seasonNo][episodeNo].path === videoPath) {
+                            return { showIndex: i, season: seasonNo, episode: episodeNo } as SeasonEpisodeInfo;
+                        }
+                    }
+                }
+            } else {
+                for (let j = 0; j < show.content.length; j++) {
+                    if ((show.content as LocalVideo[])[j].path === videoPath) return { showIndex: i, index: j } as LocalVideoIndex;
+                }
+            }
+        }
+        return null;
+    }
+
+}
+
+interface SeasonEpisodeInfo {
+    showIndex: number;
+    season: string;
+    episode: string;
+}
+
+interface LocalVideoIndex {
+    showIndex: number;
+    index: number;
 }

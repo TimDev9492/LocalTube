@@ -1,3 +1,4 @@
+import { IpcRenderer } from "electron";
 import { PathLike } from "original-fs";
 import { LocalTubeDatabase } from "../backend/structure";
 
@@ -10,4 +11,9 @@ declare global {
 export interface LocalTubeAPI {
     getThumbnailBuffer: (path: PathLike) => Promise<Buffer>;
     getDatabase: () => Promise<LocalTubeDatabase>;
+    updateVideoTimePos: (videoPath: PathLike, timePos: number) => void;
+    openMpv: (path: PathLike) => void;
+    signalMpvTimePosChange: () => void;
+    onMpvTimePosChange: (callback: (event: Electron.IpcRendererEvent, ...args: any[]) => void) => IpcRenderer;
+    onMpvExit: (callback: (event: Electron.IpcRendererEvent, ...args: any[]) => void) => IpcRenderer;
 }

@@ -34,8 +34,6 @@ function AccordionItem({ index, children, isAnimated, setAnimated, showSeason, a
             setLoaded(true);
             setOffsetHeight((self.current as any).offsetHeight);
         }
-        // const worker = new Worker();
-        // worker.onmessage()
     }, [self.current]);
 
     window.addEventListener('resize', () => self.current && setOffsetHeight((self.current as any).offsetHeight));

@@ -3,6 +3,7 @@ import { LocalVideo } from '../../backend/structure';
 import placeholder from '../../../assets/placeholder.png';
 import converter from '../../backend/workers/convert';
 import { PathLike } from 'original-fs';
+import { IpcRendererEvent } from 'electron';
 
 export function VideoCard({ gridCol, video, episodeNo, activeVideoPath, setActiveVideoByPath }: { gridCol: number, video: LocalVideo, episodeNo: string | number, activeVideoPath: PathLike, setActiveVideoByPath: Function }): JSX.Element {
     const [base64data, setBase64data] = React.useState<string>(null);
@@ -10,13 +11,23 @@ export function VideoCard({ gridCol, video, episodeNo, activeVideoPath, setActiv
     date.setSeconds(video.metadata.duration); // specify value for SECONDS here
     const offset: number = Math.floor(video.metadata.duration / 3600) === 0 ? 3 : 0;
     const timeString: string = date.toISOString().substr(11 + offset, 8 - offset);
-    const percentage: number = Math.round(100 * video.metadata.timePos / video.metadata.duration);
+    let [percentage, setPercentage] = React.useState<number>(Math.round(100 * video.metadata.timePos / video.metadata.duration));
 
     const onVideoClick = (): any => {
+        // don't do anything if mpv is already playing
+        if (activeVideoPath) return;
+        window.localtubeAPI.openMpv(video.path);
         setActiveVideoByPath(video.path);
     }
 
     React.useEffect(() => {
+        window.localtubeAPI.onMpvTimePosChange((_event: IpcRendererEvent, timePos: number, videoPath: PathLike) => {
+            if (videoPath === video.path) {
+                setPercentage(Math.round(100 * timePos / video.metadata.duration));
+                window.localtubeAPI.updateVideoTimePos(videoPath, timePos);
+            }
+        });
+
         window.localtubeAPI.getThumbnailBuffer(video.path).then(
             (bufferData) => converter.getAsBase64(bufferData).then(
                 (base64) => setBase64data(base64),

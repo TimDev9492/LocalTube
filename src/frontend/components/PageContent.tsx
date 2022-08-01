@@ -46,6 +46,10 @@ export default function PageContent({ contentData }: { contentData: PageContentD
                 });
                 break;
         }
+
+        window.localtubeAPI.onMpvExit((_event) => {
+            setActiveVideoByPath(null);
+        })
     }, []);
 
     return <div className="dark:bg-slate-700 flex items-center justify-center flex-1 p-16">
