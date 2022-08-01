@@ -15,16 +15,16 @@ export class ShowDeserializer {
     private constructor() { }
 
     /**
-     * Read a video thumbnail from jpeg as base64
+     * Read a video thumbnail from jpeg as buffer
      * @param absPath {PathLike} The absolute path of the video file
-     * @returns A video thumbnail encoded in base64
+     * @returns A video thumbnail encoded as buffer
      */
-    public static getVideoThumbnailBase64(absPath: PathLike): Promise<string> {
+    public static getVideoThumbnailBuffer(absPath: PathLike): Promise<Buffer> {
         return new Promise((resolve, reject) =>
             this.createVideoThubmnailJPEG(absPath).then(
                 (thumbnailPath) => fs.readFile(thumbnailPath, (err, data) => {
                     err && reject(err);
-                    data && resolve(data.toString('base64'));
+                    data && resolve(data);
                 })),
         );
     }

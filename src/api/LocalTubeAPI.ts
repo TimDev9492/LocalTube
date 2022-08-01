@@ -8,6 +8,6 @@ declare global {
 }
 
 export interface LocalTubeAPI {
-    getThumbnailBase64: (path: PathLike) => Promise<string>;
+    getThumbnailBuffer: (path: PathLike) => Promise<Buffer>;
     getDatabase: () => Promise<LocalTubeDatabase>;
 }
