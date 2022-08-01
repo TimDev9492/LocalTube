@@ -20,13 +20,13 @@ export class ShowDeserializer {
      * @returns A video thumbnail encoded as buffer
      */
     public static getVideoThumbnailBuffer(absPath: PathLike): Promise<Buffer> {
-        return new Promise((resolve, reject) =>
+        return new Promise((resolve, reject) => {
             this.createVideoThubmnailJPEG(absPath).then(
                 (thumbnailPath) => fs.readFile(thumbnailPath, (err, data) => {
                     err && reject(err);
                     data && resolve(data);
-                })),
-        );
+                }));
+        });
     }
 
     /**
@@ -47,7 +47,10 @@ export class ShowDeserializer {
             let thumbnailPath = path.join(cacheDir, filename);
 
             // return thumbnail if it is cached
-            if (fs.existsSync(thumbnailPath)) resolve(thumbnailPath);
+            if (fs.existsSync(thumbnailPath)) {
+                resolve(thumbnailPath);
+                return;
+            }
 
             // otherwise create a thumbnail
 
