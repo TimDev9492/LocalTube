@@ -57,7 +57,8 @@ export default function Header(): JSX.Element {
 	c11.028,0,20-8.996,20-20.053V148.275h19.791c8.436,0,11.066-3.854,11.884-6.151C330.615,139.822,331.009,135.161,324.442,129.811z"/>
                                     </svg>
                                     <a>Home</a>
-                                </div><div className="group cursor-pointer flex items-center text-slate-300  hover:text-slate-800 dark:hover:text-white px-3 py-2 rounded-md text-md font-medium">
+                                </div>
+                                <div className="group cursor-pointer flex items-center text-slate-300  hover:text-slate-800 dark:hover:text-white px-3 py-2 rounded-md text-md font-medium">
                                     <svg role="add" className="inline h-4 w-4 mr-2 dark:fill-slate-300 dark:group-hover:fill-white"
                                         viewBox="0 0 60.364 60.364" fill="none">
                                         <path d="M54.454,23.18l-18.609-0.002L35.844,5.91C35.845,2.646,33.198,0,29.934,0c-3.263,0-5.909,2.646-5.909,5.91v17.269

@@ -1,3 +1,4 @@
+import { PathLike } from 'original-fs';
 import * as React from 'react';
 import { LocalShow } from '../../backend/structure';
 import { ShowAccordion } from './tabs/ShowAccordion';
@@ -30,6 +31,9 @@ export default function PageContent({ contentData }: { contentData: PageContentD
     // React hook for loading and setting page content
     const [data, setContentData] = React.useState<LocalShow | LocalShow[]>(null);
 
+    // React hook for setting active video
+    const [activeVideoPath, setActiveVideoByPath] = React.useState<PathLike>(null);
+
     // start loading page content
     React.useEffect(() => {
         switch (contentData.getTab()) {
@@ -45,6 +49,6 @@ export default function PageContent({ contentData }: { contentData: PageContentD
     }, []);
 
     return <div className="dark:bg-slate-700 flex items-center justify-center flex-1 p-16">
-        {contentData.getTab() === Tab.Show && <ShowAccordion show={data as LocalShow} />}
+        {contentData.getTab() === Tab.Show && <ShowAccordion activeVideoPath={activeVideoPath} setActiveVideoByPath={setActiveVideoByPath} show={data as LocalShow} />}
     </div>
 }
