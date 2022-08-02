@@ -1,6 +1,5 @@
 import { app, BrowserWindow } from 'electron';
 
-import * as fs from 'fs';
 import * as ffmpeg from 'fluent-ffmpeg';
 import * as ffprobe_bin from 'ffprobe-static';
 import ffmpeg_bin from '@ffmpeg-installer/ffmpeg';
@@ -20,10 +19,6 @@ if (require('electron-squirrel-startup')) {
   // eslint-disable-line global-require
   app.quit();
 }
-
-// make the bundled ffprobe and ffmpeg binaries executable
-fs.chmod(ffprobe_bin.path, '744', (error) => console.error(error));
-fs.chmod(ffmpeg_bin.path, '744', (error) => console.error(error));
 
 // set the paths of ffprobe and ffmpeg binaries
 ffmpeg.setFfmpegPath(ffmpeg_bin.path);

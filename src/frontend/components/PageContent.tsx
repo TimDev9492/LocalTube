@@ -40,6 +40,7 @@ export default function PageContent({ contentData }: { contentData: PageContentD
             case Tab.Show:
                 // if in show tab, the data attribute of contentData contains the name of the show
                 window.localtubeAPI.getDatabase().then((database) => {
+                    console.log(contentData.getData());
                     setContentData(database.shows.find(show => show.metadata.title === contentData.getData()));
                 }, (error) => {
                     console.error(error);
