@@ -9,7 +9,7 @@ export const buildAPI: Function = (): void => {
         getThumbnailBuffer: (path: PathLike): Promise<Buffer> => ipcRenderer.invoke('fs:getThumbnailBuffer', path),
         getDatabase: (): Promise<LocalTubeDatabase> => ipcRenderer.invoke('db:getDatabase'),
         updateVideoTimePos: (videoPath: PathLike, timePos: number): void => ipcRenderer.send('db:updateVideoTimePos', videoPath, timePos),
-        openMpv: (path: PathLike): void => ipcRenderer.send('os:openMpv', path),
+        openMpv: (path: PathLike, startTime: number): void => ipcRenderer.send('os:openMpv', path, startTime),
         signalMpvTimePosChange: (): void => ipcRenderer.send('mpv:listen-timepos'),
         onMpvTimePosChange: (callback: (event: Electron.IpcRendererEvent, ...args: any[]) => void): IpcRenderer => ipcRenderer.on('mpv:update-timepos', callback),
         onMpvExit: (callback: (event: Electron.IpcRendererEvent, ...args: any[]) => void): IpcRenderer => ipcRenderer.on('mpv:exit', callback),

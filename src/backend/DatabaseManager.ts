@@ -71,7 +71,7 @@ export class DatabaseManager {
     }
 
     /**
-     * Store a new timepos for a video file in the database and save the database
+     * Store a new timepos for a video file in the database
      * @param videoPath {PathLike} The absolute path of the video file
      * @param timePos The new timepos
      */
@@ -90,7 +90,6 @@ export class DatabaseManager {
             // resource identifier is of type SeasonEpisodeInfo
             (DatabaseManager.database.shows[ri.showIndex].content as LocalShowContent)[ri.season][ri.episode].metadata.timePos = timePos;
         }
-        DatabaseManager.saveDatabase();
     }
 
     /**

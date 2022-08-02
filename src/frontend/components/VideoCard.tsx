@@ -4,6 +4,7 @@ import placeholder from '../../../assets/placeholder.png';
 import converter from '../../backend/workers/convert';
 import { PathLike } from 'original-fs';
 import { IpcRendererEvent } from 'electron';
+import settings from '../../settings';
 
 export function VideoCard({ gridCol, video, episodeNo, activeVideoPath, setActiveVideoByPath }: { gridCol: number, video: LocalVideo, episodeNo: string | number, activeVideoPath: PathLike, setActiveVideoByPath: Function }): JSX.Element {
     const [base64data, setBase64data] = React.useState<string>(null);
@@ -12,19 +13,30 @@ export function VideoCard({ gridCol, video, episodeNo, activeVideoPath, setActiv
     const offset: number = Math.floor(video.metadata.duration / 3600) === 0 ? 3 : 0;
     const timeString: string = date.toISOString().substr(11 + offset, 8 - offset);
     let [percentage, setPercentage] = React.useState<number>(Math.round(100 * video.metadata.timePos / video.metadata.duration));
+    let [timePos, setTimePos] = React.useState<number>(video.metadata.timePos);
 
-    const onVideoClick = (): any => {
+    const onVideoClick = () => {
         // don't do anything if mpv is already playing
         if (activeVideoPath) return;
-        window.localtubeAPI.openMpv(video.path);
+
+        // set startTime equal to time where you left off and rewind NEG_RESUME_OFFSET seconds
+        let startTime = Math.max(timePos - settings.NEG_RESUME_OFFSET, 0);
+
+        // if time left till end is smaller than END_TIME_TRESHOLD, start at the beginning
+        if (video.metadata.duration - timePos <= settings.END_TIME_THRESHOLD) startTime = 0;
+
+        // launch MPV
+        window.localtubeAPI.openMpv(video.path, startTime);
+
+        // set active playing video
         setActiveVideoByPath(video.path);
     }
 
     React.useEffect(() => {
         window.localtubeAPI.onMpvTimePosChange((_event: IpcRendererEvent, timePos: number, videoPath: PathLike) => {
             if (videoPath === video.path) {
+                setTimePos(timePos);
                 setPercentage(Math.round(100 * timePos / video.metadata.duration));
-                window.localtubeAPI.updateVideoTimePos(videoPath, timePos);
             }
         });
 

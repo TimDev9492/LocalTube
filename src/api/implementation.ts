@@ -17,8 +17,8 @@ export function handleUpdateVideoTimePos(event: IpcMainEvent, videoPath: PathLik
     DatabaseManager.updateVideoTimePos(videoPath, timePos);
 }
 
-export function handleOpenMpv(event: IpcMainEvent, path: PathLike): void {
-    VideoPlayer.openMpv(path);
+export function handleOpenMpv(event: IpcMainEvent, path: PathLike, startTime: number): void {
+    VideoPlayer.openMpv(path, startTime);
 }
 
 export function handleSignalMpvTimePosChange(event: IpcMainEvent): void {

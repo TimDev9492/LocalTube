@@ -2,6 +2,7 @@ import { PathLike } from "original-fs";
 import { webContents, WebContents } from "electron";
 import luaScript from '../../assets/localtube-timepos.lua';
 import * as child_process from 'child_process';
+import { DatabaseManager } from "./DatabaseManager";
 
 /**
  * A class that manages launching and communicating with the video player
@@ -32,33 +33,36 @@ export class VideoPlayer {
      * @param path {PathLike} The absolute path of the video file
      * @returns A boolean that tells if the player started successfully
      */
-    public static openMpv(path: PathLike): void {
-        let child = child_process.spawn('mpv', [path.toString(), `--script=${luaScript}`]);
+    public static openMpv(path: PathLike, startTime: number): void {
+        let args = [path.toString(), `--script=${luaScript}`, `--start=${startTime}`];
+        let child = child_process.spawn('mpv', args);
 
         // You can also use a variable to save the output for when the script closes later
         child.on('error', (error) => {
+            // print errors to the console
             console.error(error);
         });
 
         child.stdout.setEncoding('utf8');
         child.stdout.on('data', (data) => {
             // stdout
-            if (data.startsWith('[localtube_timepos] ')) {
-                let timepos = parseFloat(data.replace('[localtube_timepos] ', ''));
-                timepos && VideoPlayer.webListeners.forEach(webContents => webContents.send('mpv:update-timepos', timepos, path));
-            }
-            // console.log(data);
-        });
 
-        child.stderr.setEncoding('utf8');
-        child.stderr.on('data', (data) => {
-            // sterr
+            // extract timepos update information from stdout
+            if (data.startsWith('[localtube_timepos] ')) {
+                let timeposStr = data.replace('[localtube_timepos] ', '');
+                let timepos = parseFloat(timeposStr);
+                if (timepos === null || Number.isNaN(timepos)) return;
+                VideoPlayer.webListeners.forEach(webContents => webContents.send('mpv:update-timepos', timepos, path));
+                DatabaseManager.updateVideoTimePos(path, timepos);
+            }
         });
 
         child.on('close', (code) => {
-            // Here you can get the exit code of the script  
-            console.log('MPV finished with exit code ' + code);
+            // notify WebListeners that mpv exited
             VideoPlayer.webListeners.forEach(webContents => webContents.send('mpv:exit'));
+
+            // save the database to disk
+            DatabaseManager.saveDatabase();
         });
     }
 

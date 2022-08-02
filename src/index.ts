@@ -69,6 +69,7 @@ app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
   }
+  DatabaseManager.saveDatabase();
 });
 
 app.on('activate', () => {
