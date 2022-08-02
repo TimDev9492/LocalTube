@@ -2,6 +2,51 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.1.0](https://github.com/TimDev9492/LocalTube/compare/v0.0.2...v0.1.0) (2022-08-02)
+
+
+### ⚠ BREAKING CHANGES
+
+* **frontend:** add communication and video playback with mpv
+* **backend:** implement show serialization + bundle ffmpeg and ffprobe binaries
+* **backend:** implement serializer for local shows
+* **api:** add api data structure and communication bridges
+* **dev:** change version back to 0.0.1
+* **backend:** add data structures
+
+### Features
+
+* **api:** add api data structure and communication bridges ([14b71b4](https://github.com/TimDev9492/LocalTube/commit/14b71b46f90243d80ce6ea19ff1a7a3db5b9f22a))
+* **api:** add api route to get database state ([e8b5574](https://github.com/TimDev9492/LocalTube/commit/e8b557484db8936f7ef18b7019df86c219608204))
+* **api:** update and implement api ([d2bd414](https://github.com/TimDev9492/LocalTube/commit/d2bd414aa9e4d87bc9dc719b1e7b1c2b405c8107))
+* **backend:** add config option to mutate show title from filename ([0081f2f](https://github.com/TimDev9492/LocalTube/commit/0081f2f7aed118b890a2f405911e83d236610e4b))
+* **backend:** add data structures ([8493383](https://github.com/TimDev9492/LocalTube/commit/849338366374d543b508e855055ac10f7e9e5d09))
+* **backend:** implement serializer for local shows ([ce28987](https://github.com/TimDev9492/LocalTube/commit/ce28987d2781734580aff7481c1909036d0112bf))
+* **backend:** implement show serialization + bundle ffmpeg and ffprobe binaries ([4c11d84](https://github.com/TimDev9492/LocalTube/commit/4c11d84cc76d57ceaed38d316c91d383ce90da2f))
+* **dev:** add breaking change option to commit.sh ([d3909a4](https://github.com/TimDev9492/LocalTube/commit/d3909a4dc585d4cb3dde49cb8668ea0663ec7afa))
+* **frontend:** add communication and video playback with mpv ([aa6eb2b](https://github.com/TimDev9492/LocalTube/commit/aa6eb2b9b3c7538da39f37ce14814fbfb643f9b9))
+* **frontend:** display videos loaded from database.json in ui ([2dcabc2](https://github.com/TimDev9492/LocalTube/commit/2dcabc2a9a2c6fe0a97cca3e8181e5ec1ca616f4))
+* **gui:** add spinner component ([650bb13](https://github.com/TimDev9492/LocalTube/commit/650bb139873b10a0a57c4572ca9a0be281b3886e))
+* **gui:** build and style video card ([3e50243](https://github.com/TimDev9492/LocalTube/commit/3e50243a4a1c4132439a143425e0dd7a3bb7172f))
+* **gui:** initialize video card component ([3787c44](https://github.com/TimDev9492/LocalTube/commit/3787c442da4c5c46085dad1ff863d253c2a954ab))
+
+
+### Bug Fixes
+
+* **api:** add getDatabase route to LocalTubeAPI interface ([c6f8afc](https://github.com/TimDev9492/LocalTube/commit/c6f8afc0e9253a2187311462dc4480a444b8a3e1))
+* **backend:** make ConfigManager accessible to every component ([4df22fb](https://github.com/TimDev9492/LocalTube/commit/4df22fbb773e732e0c1d3e8bcfc1e5e967c3cb40))
+* **dev:** change ffmpeg-installer version to custom node package to fix build issue ([96635e4](https://github.com/TimDev9492/LocalTube/commit/96635e41d859597abecc7862939ff7ae3a6c7033))
+* **dev:** fix build issues ([a4b170a](https://github.com/TimDev9492/LocalTube/commit/a4b170ae774fd7ef21fea6b72edae8313181f9e8))
+* **frontend:** fix mpv playback options ([9b646a8](https://github.com/TimDev9492/LocalTube/commit/9b646a861b52c4697ea159a1a3c8ee453c236a20))
+* **frontend:** fix show accordion blocking ui thread when loading ([78acc3c](https://github.com/TimDev9492/LocalTube/commit/78acc3c31605993876c009ed83ba615e2320d6bf))
+* **frontend:** load base64 image data on worker thread ([2e5e26a](https://github.com/TimDev9492/LocalTube/commit/2e5e26a08baecb3aee7d979cb3d3aa36c6aa4e23))
+* **gui:** fix accordion animations ([fe352a1](https://github.com/TimDev9492/LocalTube/commit/fe352a10e6371a8582ddf0807786b4cd164d9a24))
+
+
+### revert
+
+* **dev:** change version back to 0.0.1 ([4625894](https://github.com/TimDev9492/LocalTube/commit/46258941d6486795fa5d729fb211d85c8a23e245))
+
 ### 0.0.1 (2022-07-29)
 
 
