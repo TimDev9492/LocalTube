@@ -1,6 +1,7 @@
 import { PathLike } from 'original-fs';
 import * as React from 'react';
 import { LocalShow } from '../../backend/structure';
+import { AddShow } from './tabs/AddShow';
 import { ShowAccordion } from './tabs/ShowAccordion';
 
 export enum Tab {
@@ -51,9 +52,10 @@ export default function PageContent({ contentData }: { contentData: PageContentD
         window.localtubeAPI.onMpvExit((_event) => {
             setActiveVideoByPath(null);
         })
-    }, []);
+    }, [contentData]);
 
     return <div className="dark:bg-slate-700 flex items-center justify-center flex-1 p-16">
         {contentData.getTab() === Tab.Show && <ShowAccordion activeVideoPath={activeVideoPath} setActiveVideoByPath={setActiveVideoByPath} show={data as LocalShow} />}
+        {contentData.getTab() === Tab.Add && <AddShow />}
     </div>
 }

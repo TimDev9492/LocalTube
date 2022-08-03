@@ -1,7 +1,13 @@
 module.exports = {
     darkMode: 'class',
     content: ['./src/**/*.tsx'],
-    theme: {},
+    theme: {
+        extend: {
+            fontFamily: {
+                jetbrains: ['JetBrainsMono'],
+            },
+        },
+    },
     variants: {},
     plugins: [],
 };

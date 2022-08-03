@@ -26,8 +26,21 @@ module.exports = [
       },
     },
   },
+  // {
+  //   // Move fonts to fonts directory
+  //   test: /\.(ttf|woff|woff2)$/,
+  //   use: [
+  //     {
+  //       options: {
+  //         name: "[name].[ext]",
+  //         outputPath: "fonts/"
+  //       },
+  //       loader: "file-loader"
+  //     }
+  //   ]
+  // },
   {
-    // Move asset files to the assets folder
+    // Move asset files to the assets directory
     test: /\.(png|lua)$/,
     use: [
       {

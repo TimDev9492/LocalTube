@@ -2,6 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'JetBrainsMono';
+  src: url(../../assets/fonts/JetBrainsMono-Bold.woff2),
+    url(../../assets/fonts/JetBrainsMono-BoldItalic.woff2),
+    url(../../assets/fonts/JetBrainsMono-ExtraBold.woff2),
+    url(../../assets/fonts/JetBrainsMono-ExtraBoldItalic.woff2),
+    url(../../assets/fonts/JetBrainsMono-ExtraLight.woff2),
+    url(../../assets/fonts/JetBrainsMono-ExtraLightItalic.woff2),
+    url(../../assets/fonts/JetBrainsMono-Italic.woff2),
+    url(../../assets/fonts/JetBrainsMono-Light.woff2),
+    url(../../assets/fonts/JetBrainsMono-LightItalic.woff2),
+    url(../../assets/fonts/JetBrainsMono-Medium.woff2),
+    url(../../assets/fonts/JetBrainsMono-MediumItalic.woff2),
+    url(../../assets/fonts/JetBrainsMono-Regular.woff2),
+    url(../../assets/fonts/JetBrainsMono-SemiBold.woff2),
+    url(../../assets/fonts/JetBrainsMono-SemiBoldItalic.woff2),
+    url(../../assets/fonts/JetBrainsMono-Thin.woff2),
+    url(../../assets/fonts/JetBrainsMono-ThinItalic.woff2);
+}
+
 @layer utilities {
   .flex-third {
     flex: 1 0 33%;

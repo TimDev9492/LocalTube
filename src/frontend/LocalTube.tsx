@@ -9,7 +9,7 @@ export default function LocalTube(): JSX.Element {
         window.localtubeAPI.signalMpvTimePosChange();
     }, []);
 
-    const [pageContent, setPageContent] = React.useState<PageContentData>(new PageContentData(Tab.Home, null));
+    const [pageContent, setPageContent] = React.useState<PageContentData>(new PageContentData(Tab.Add, null));
 
     return <PageContext.Provider value={[pageContent, setPageContent]}>
         <div className="min-h-screen flex flex-col">

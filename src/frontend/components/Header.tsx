@@ -75,17 +75,17 @@ export default function Header(): JSX.Element {
                         </div>
                         <div className="block">
                             <div className="md:block -mr-2 flex">
-                                <form className="flex flex-col md:flex-row w-3/4 md:w-full max-w-sm md:space-x-3 space-y-3 md:space-y-0 justify-center">
+                                <div className="flex flex-col md:flex-row w-3/4 md:w-full max-w-sm md:space-x-3 space-y-3 md:space-y-0 justify-center">
                                     <div className="relative ">
-                                        <input type="text" id="&quot;form-subscribe-Search" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="rounded-lg border-transparent flex-1 appearance-none border border-slate-300 w-full py-2 px-4 bg-white text-slate-700 placeholder-slate-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent" placeholder="Search Shows..." />
+                                        <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="rounded-lg border-transparent flex-1 appearance-none border border-slate-300 w-full py-2 px-4 bg-white text-slate-700 placeholder-slate-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent" placeholder="Search Shows..." />
                                         <div className="absolute top-full">
                                             <ShowList shows={shows.filter(show => searchQuery.length && show.title.toLowerCase().includes(searchQuery.toLowerCase()))}></ShowList>
                                         </div>
                                     </div>
-                                    <button onClick={() => setSearchQuery('')} className="flex-shrink-0 px-4 py-2 text-base font-semibold text-white bg-purple-600 rounded-lg shadow-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-purple-200" type="submit">
+                                    <button onClick={() => setSearchQuery('')} className="flex-shrink-0 px-4 py-2 text-base font-semibold text-white bg-purple-600 rounded-lg shadow-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-purple-200">
                                         Clear
                                     </button>
-                                </form>
+                                </div>
                             </div>
                             <div className="ml-4 flex items-center md:ml-6">
                             </div>
@@ -98,32 +98,6 @@ export default function Header(): JSX.Element {
                                 </svg>
                             </button>
                         </div>
-                    </div>
-                </div>
-                <div className="md:hidden">
-                    <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                        <a className="text-slate-300 hover:text-slate-800 dark:hover:text-white block px-3 py-2 rounded-md text-base font-medium">
-                            Home
-                        </a>
-                        <a className="text-slate-800 dark:text-white block px-3 py-2 rounded-md text-base font-medium">
-                            Gallery
-                        </a>
-                        <a className="text-slate-300 hover:text-slate-800 dark:hover:text-white block px-3 py-2 rounded-md text-base font-medium">
-                            Content
-                        </a>
-                        <a className="text-slate-300 hover:text-slate-800 dark:hover:text-white block px-3 py-2 rounded-md text-base font-medium">
-                            Contact
-                        </a>
-                    </div>
-                    <div className="p-2 flex">
-                        <form className="flex flex-col md:flex-row w-3/4 md:w-full max-w-sm md:space-x-3 space-y-3 md:space-y-0 justify-center">
-                            <div className=" relative ">
-                                <input type="text" id="&quot;form-subscribe-Search" className=" rounded-lg border-transparent flex-1 appearance-none border border-slate-300 w-full py-2 px-4 bg-white text-slate-700 placeholder-slate-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent" placeholder="components" />
-                            </div>
-                            <button className="flex-shrink-0 px-4 py-2 text-base font-semibold text-white bg-purple-600 rounded-lg shadow-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-purple-200" type="submit">
-                                Search
-                            </button>
-                        </form>
                     </div>
                 </div>
             </nav>
