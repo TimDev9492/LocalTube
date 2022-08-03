@@ -48,6 +48,13 @@ export class DatabaseManager {
 
             // read file into JSON object
             DatabaseManager.database = JSON.parse(fs.readFileSync(DatabaseManager.databasePath).toString());
+            
+            // parse regex strings to regular expressions
+            DatabaseManager.database.shows.forEach(show => {
+                if (show.fileConfig && show.fileConfig.regExtract && show.fileConfig.regExtract.regex) {
+                    show.fileConfig.regExtract.regex = new RegExp(show.fileConfig.regExtract.regex);
+                }
+            });
         }
     }
 
@@ -59,7 +66,7 @@ export class DatabaseManager {
         if (!DatabaseManager.databasePath) throw new Error('Database path not set. Set the path using `DatabaseManager.setDatabasePath(path: PathLike)`');
 
         // write serialized JSON object to disk
-        fs.writeFileSync(DatabaseManager.databasePath, JSON.stringify(DatabaseManager.database));
+        fs.writeFileSync(DatabaseManager.databasePath, JSON.stringify(DatabaseManager.database, (key, value) => value instanceof RegExp ? value.toString() : value));
     }
 
     /**
