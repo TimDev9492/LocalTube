@@ -52,7 +52,8 @@ export class DatabaseManager {
             // parse regex strings to regular expressions
             DatabaseManager.database.shows.forEach(show => {
                 if (show.fileConfig && show.fileConfig.regExtract && show.fileConfig.regExtract.regex) {
-                    show.fileConfig.regExtract.regex = new RegExp(show.fileConfig.regExtract.regex);
+                    let parts = (show.fileConfig.regExtract.regex as unknown as string).split(/(?<!\\)\//);
+                    show.fileConfig.regExtract.regex = new RegExp(parts[1], parts[2]);
                 }
             });
         }
