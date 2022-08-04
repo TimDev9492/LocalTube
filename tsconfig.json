@@ -1,6 +1,8 @@
 {
   "compilerOptions": {
     "allowJs": true,
+    "target": "es5",
+    "downlevelIteration": true,
     "module": "ES2022",
     "skipLibCheck": true,
     "esModuleInterop": true,

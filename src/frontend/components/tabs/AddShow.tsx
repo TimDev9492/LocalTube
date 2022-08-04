@@ -1,5 +1,6 @@
 import { OpenDialogOptions } from 'electron';
 import * as React from 'react';
+import { useEffect } from 'react';
 import { RegExtractConfig } from '../../../backend/structure';
 import DetectOutsideClick from '../DetectOutsideClick';
 
@@ -26,8 +27,8 @@ export function AddShow(): JSX.Element {
     const [showRegSection, setShowRegSection] = React.useState<boolean>(true);
 
     React.useEffect(() => {
-        console.log(fileExtensions);
-    }, [fileExtensions]);
+        console.log(regExtract);
+    }, [regExtract]);
 
     React.useEffect(() => {
         if (!dirPath.length) {
@@ -52,7 +53,7 @@ export function AddShow(): JSX.Element {
 
     return <FileExtensionsContext.Provider value={[fileExtensions, setFileExtensions]}>
         <RegExtractContext.Provider value={[regExtract, setRegExtract]}>
-            <div className="text-xl font-light text-slate-600 sm:text-2xl dark:text-white select-none flex flex-col w-3/5 px-4 py-8 bg-white rounded-lg shadow dark:bg-slate-800 sm:px-6 md:px-8 lg:px-10">
+            <div className="text-xl font-light text-slate-600 sm:text-2xl dark:text-white select-none flex flex-col xl:min-w-6xl w-3/5 px-4 py-8 bg-white rounded-lg shadow dark:bg-slate-800 sm:px-6 md:px-8 lg:px-10">
                 <div className="self-center mb-6">
                     Add a show
                 </div>
@@ -169,13 +170,15 @@ function FileExtensionsDropdown(): JSX.Element {
 
 function RegExtractSection(): JSX.Element {
     const [regexString, setRegexString] = React.useState<string>('');
+    const [seasonGroup, setSeasonGroup] = React.useState<number>(null);
+    const [episodeGroup, setEpisodeGroup] = React.useState<number>(null);
+    const [titleGroup, setTitleGroup] = React.useState<number>(null);
 
     function changeRegexString(newRegexString: string, oldRegExtract: RegExtractConfig, setRegExtract: Function): any {
         setRegexString(newRegexString);
         try {
             const regex: RegExp = new RegExp(newRegexString);
-            oldRegExtract.regex = regex;
-            setRegExtract(oldRegExtract);
+            setRegExtract({ ...oldRegExtract, regex });
         } catch (err) {
             console.error(err);
         }
@@ -184,14 +187,38 @@ function RegExtractSection(): JSX.Element {
     return <RegExtractContext.Consumer>
         {([regExtract, setRegExtract]) => <div className="flex flex-col border-l-4 border-slate-500 bg-slate-700 p-2 font-jetbrains">
             <div className="flex gap-4 items-center ml-4">
-                <p className="text-sm">Regex:</p>
-                {/*value={dirPath} onChange={(e) => setDirPath(e.target.value)}*/}
+                <p className="text-base">Regex:</p>
                 <div className="w-full relative text-gray-700 text-sm">
                     <input value={regexString} onChange={(e) => changeRegexString(e.target.value, regExtract, setRegExtract)} type="text" className="px-5 w-full rounded-lg border-transparent flex-1 appearance-none border border-gray-300 py-2 bg-white placeholder-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent" name="pseudo" spellCheck="false" placeholder="Regular expression" />
                     <p className="absolute bottom-1.5 -translate-y-px left-2.5 text-base text-gray-400">/</p>
                     <p className="absolute bottom-1.5 -translate-y-px right-2.5 text-base text-gray-400">/</p>
                 </div>
             </div>
+            <div className="ml-4 mt-2">
+                <h1 className="text-base w-full">Matching groups:</h1>
+                <div className="w-full relative text-white text-sm">
+                    <div className="ml-4 flex items-center gap-4 mt-1">
+                        <p>Season</p>
+                        <NumberSelect numbers={[0, 1, 2, 3, 4, 5]} currentNumber={seasonGroup} setCurrentNumber={setSeasonGroup} />
+                    </div>
+                    <div className="ml-4 flex items-center gap-4 mt-1">
+                        <p>Season</p>
+                        <NumberSelect numbers={[0, 1, 2, 3, 4, 5]} currentNumber={seasonGroup} setCurrentNumber={setSeasonGroup} />
+                    </div>
+                    <div className="ml-4 flex items-center gap-4 mt-1">
+                        <p>Season</p>
+                        <NumberSelect numbers={[0, 1, 2, 3, 4, 5]} currentNumber={seasonGroup} setCurrentNumber={setSeasonGroup} />
+                    </div>
+                </div>
+            </div>
         </div>}
     </RegExtractContext.Consumer>
+}
+
+function NumberSelect({ numbers, currentNumber, setCurrentNumber }: { numbers: number[], currentNumber: number, setCurrentNumber: Function }): JSX.Element {
+    return <div className="flex p-1 gap-1 bg-slate-500 rounded-sm">
+        {numbers.map(number => <div key={number} onClick={() => setCurrentNumber(number)} className={["px-4 rounded-sm cursor-pointer transition-colors duration-100", currentNumber === number ? "bg-slate-700" : "bg-slate-600"].join(' ')}>
+            {number}
+        </div>)}
+    </div>
 }
