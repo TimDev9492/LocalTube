@@ -56,6 +56,10 @@ export function handleGetRandomFileFromDir(event: IpcMainEvent, dirPath: PathLik
     });
 }
 
+export function handleCheckShowName(event: IpcMainEvent, showName: string): boolean {
+    return DatabaseManager.getDatabase().shows.find(show => show.metadata.title === showName) === undefined;
+}
+
 export function handleGetDatabase(event: IpcMainEvent): LocalTubeDatabase {
     return DatabaseManager.getDatabase();
 }

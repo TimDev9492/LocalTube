@@ -10,6 +10,7 @@ const RegExtractContext = React.createContext<[regExtract: RegExtractConfig, set
 
 export function AddShow(): JSX.Element {
     const [showName, setShowName] = React.useState<string>('');
+    const [isValidShowName, setIsValidShowName] = React.useState<boolean>(false);
     const [dirPath, setDirPath] = React.useState<string>('');
     const [isValidPath, setIsValidPath] = React.useState<boolean>(false);
     const [fileExtensions, setFileExtensions] = React.useState<string[]>([]);
@@ -34,7 +35,22 @@ export function AddShow(): JSX.Element {
     const [showPopup, setShowPopup] = React.useState<boolean>(false);
     const [popupStyle, setPopupStyle] = React.useState({ background: 'rgba(0, 0, 0, 0)', zIndex: -50 });
 
+    React.useEffect(() => {
+        if (!showName.length) {
+            setIsValidShowName(false);
+            return;
+        }
+        window.localtubeAPI.checkShowName(showName).then(
+            (response) => setIsValidShowName(response),
+            (error) => console.error(error),
+        );
+    }, [showName]);
+
     function btnAddShow() {
+        if (!isValidShowName) {
+            alert('There already exists a show with that name. Please use a unique name!');
+            return;
+        }
         if (!isValidPath) {
             alert('The show directory path you entered is not a valid directory!');
             return;
@@ -118,7 +134,17 @@ export function AddShow(): JSX.Element {
                 <div className="relative flex flex-col gap-4 justify-evenly mt-4 items-center px-48 py-4">
                     <div className="absolute border border-slate-600 w-full top-0"></div>
                     <h1 className="text-base">Give the show a name: </h1>
-                    <input type="text" value={showName} onChange={(e) => setShowName(e.target.value)} className="w-full rounded-lg border-transparent flex-1 appearance-none border border-gray-300 py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent" name="pseudo" spellCheck="false" placeholder="Enter show name..." />
+                    <div className="relative w-full">
+                        <input type="text" value={showName} onChange={(e) => setShowName(e.target.value)} className="w-full rounded-lg border-transparent flex-1 appearance-none border border-gray-300 py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent" name="pseudo" spellCheck="false" placeholder="Enter show name..." />
+                        {isValidShowName ?
+                            <svg width="15" height="15" fill="currentColor" className="absolute fill-green-500 right-2 bottom-3" viewBox="0 0 342.357 342.357">
+                                <polygon points="290.04,33.286 118.861,204.427 52.32,137.907 0,190.226 118.862,309.071 342.357,85.606 " />
+                            </svg> :
+                            <svg width="15" height="15" fill="currentColor" className="absolute text-red-500 right-2 bottom-3" viewBox="0 0 1792 1792">
+                                <path d="M1024 1375v-190q0-14-9.5-23.5t-22.5-9.5h-192q-13 0-22.5 9.5t-9.5 23.5v190q0 14 9.5 23.5t22.5 9.5h192q13 0 22.5-9.5t9.5-23.5zm-2-374l18-459q0-12-10-19-13-11-24-11h-220q-11 0-24 11-10 7-10 21l17 457q0 10 10 16.5t24 6.5h185q14 0 23.5-6.5t10.5-16.5zm-14-934l768 1408q35 63-2 126-17 29-46.5 46t-63.5 17h-1536q-34 0-63.5-17t-46.5-46q-37-63-2-126l768-1408q17-31 47-49t65-18 65 18 47 49z">
+                                </path>
+                            </svg>}
+                    </div>
                     <div className="absolute border border-slate-600 w-full bottom-0"></div>
                 </div>
                 <div className="flex gap-4 justify-evenly mt-8">

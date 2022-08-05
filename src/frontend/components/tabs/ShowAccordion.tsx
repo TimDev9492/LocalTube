@@ -38,6 +38,10 @@ function AccordionItem({ index, children, isAnimated, setAnimated, showSeason, a
     const animationTimeMs = 200;
 
     React.useEffect(() => {
+        setTimeout(() => self.current && setOffsetHeight((self.current as any).offsetHeight), 100);
+    }, []);
+
+    React.useEffect(() => {
         if (self.current && (self.current as any).offsetHeight !== undefined) {
             setTimeout(() => setLoaded(true), 10);
             setOffsetHeight((self.current as any).offsetHeight);

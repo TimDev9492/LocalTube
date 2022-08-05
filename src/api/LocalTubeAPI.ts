@@ -13,6 +13,7 @@ export interface LocalTubeAPI {
     openDialog: (dialogOptions: OpenDialogOptions) => Promise<string>;
     checkDirPath: (path: PathLike) => Promise<boolean>;
     getRandomFileFromDir: (dirPath: PathLike, fileConfig: FileConfig) => Promise<PathLike>;
+    checkShowName: (showName: string) => Promise<boolean>;
     getDatabase: () => Promise<LocalTubeDatabase>;
     addShow: (dirPath: PathLike, fileConfig: FileConfig, isConventionalShow: boolean, showTitle: string) => Promise<string>;
     updateVideoTimePos: (videoPath: PathLike, timePos: number) => void;

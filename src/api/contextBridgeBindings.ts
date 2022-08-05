@@ -1,7 +1,7 @@
 import { contextBridge, ipcMain, IpcRenderer, ipcRenderer, OpenDialogOptions } from "electron";
 import { PathLike } from "original-fs";
 import { FileConfig, LocalShow, LocalTubeDatabase } from "../backend/structure";
-import { handleAddShow, handleDebugGetDeserializedShow, handleGetRandomFileFromDir, handleCheckDirPath, handleOpenDialog, handleUpdateVideoTimePos, handleSignalMpvTimePosChange, handleOpenMpv, handleGetThumbnailBuffer, handleGetDatabase } from "./implementation";
+import { handleCheckShowName, handleAddShow, handleDebugGetDeserializedShow, handleGetRandomFileFromDir, handleCheckDirPath, handleOpenDialog, handleUpdateVideoTimePos, handleSignalMpvTimePosChange, handleOpenMpv, handleGetThumbnailBuffer, handleGetDatabase } from "./implementation";
 import { LocalTubeAPI } from "./LocalTubeAPI";
 
 export const buildAPI: Function = (): void => {
@@ -10,6 +10,7 @@ export const buildAPI: Function = (): void => {
         openDialog: (dialogOptions: OpenDialogOptions): Promise<string> => ipcRenderer.invoke('fs:openDialog', dialogOptions),
         checkDirPath: (path: PathLike): Promise<boolean> => ipcRenderer.invoke('fs:checkDirPath', path),
         getRandomFileFromDir: (dirPath: PathLike, fileConfig: FileConfig) => ipcRenderer.invoke('fs:getRandomFileFromDir', dirPath, fileConfig),
+        checkShowName: (showName: string): Promise<boolean> => ipcRenderer.invoke('db:checkShowName', showName),
         getDatabase: (): Promise<LocalTubeDatabase> => ipcRenderer.invoke('db:getDatabase'),
         addShow: (dirPath: PathLike, fileConfig: FileConfig, isConventionalShow: boolean, showTitle: string): Promise<string> => ipcRenderer.invoke('db:addShow', dirPath, fileConfig, isConventionalShow, showTitle),
         updateVideoTimePos: (videoPath: PathLike, timePos: number): void => ipcRenderer.send('db:updateVideoTimePos', videoPath, timePos),
@@ -28,6 +29,7 @@ export const initializeBindings: Function = (): void => {
     ipcMain.handle('fs:openDialog', handleOpenDialog);
     ipcMain.handle('fs:checkDirPath', handleCheckDirPath);
     ipcMain.handle('fs:getRandomFileFromDir', handleGetRandomFileFromDir);
+    ipcMain.handle('db:checkShowName', handleCheckShowName);
     ipcMain.handle('db:getDatabase', handleGetDatabase);
     ipcMain.handle('db:addShow', handleAddShow);
     ipcMain.on('db:updateVideoTimePos', handleUpdateVideoTimePos);
