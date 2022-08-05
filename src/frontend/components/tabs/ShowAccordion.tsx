@@ -9,12 +9,18 @@ const OpenItemsContext: React.Context<Set<string>> = React.createContext<Set<str
 
 export function ShowAccordion({ show, activeVideoPath, setActiveVideoByPath }: { show: LocalShow, activeVideoPath: PathLike, setActiveVideoByPath: Function }): JSX.Element {
     const [isAnimated, setAnimated] = React.useState<boolean>(false);
+    const openItems = React.useContext(OpenItemsContext);
+
+    React.useEffect(() => {
+        console.log(show);
+        openItems.clear();
+    }, [show]);
 
     return <div className="max-w-6xl h-full divide-y-2" >
         {show ? (
             show.isConventionalShow ?
-                Object.keys(show.content).sort(compareAsNumbers).map((seasonNo: string) => <AccordionItem key={seasonNo} index={seasonNo} isAnimated={isAnimated} setAnimated={setAnimated} showSeason={(show.content as LocalShowContent)[seasonNo]} activeVideoPath={activeVideoPath} setActiveVideoByPath={setActiveVideoByPath}>
-                    Season {parseInt(seasonNo)}
+                Object.keys(show.content).sort(compareAsNumbers).map((seasonNo: string) => <AccordionItem key={show.metadata.title + ':' + seasonNo} index={seasonNo} isAnimated={isAnimated} setAnimated={setAnimated} showSeason={(show.content as LocalShowContent)[seasonNo]} activeVideoPath={activeVideoPath} setActiveVideoByPath={setActiveVideoByPath}>
+                    Season {Number(seasonNo)}
                 </AccordionItem>) :
                 <h1>NOT IMPLEMENTED YET!</h1>
         ) :
@@ -25,7 +31,7 @@ export function ShowAccordion({ show, activeVideoPath, setActiveVideoByPath }: {
 function AccordionItem({ index, children, isAnimated, setAnimated, showSeason, activeVideoPath, setActiveVideoByPath }: { index: string, children: any, isAnimated: boolean, setAnimated: Function, showSeason: LocalSeason, activeVideoPath: PathLike, setActiveVideoByPath: Function }): JSX.Element {
     const self = React.useRef();
     const [isLoaded, setLoaded] = React.useState<boolean>(false);
-    const [offsetHeight, setOffsetHeight] = React.useState<number>(null);
+    const [offsetHeight, setOffsetHeight] = React.useState<number>(0);
     const openItems = React.useContext(OpenItemsContext);
 
     let animationTimeout: NodeJS.Timeout = null;
@@ -65,4 +71,27 @@ function AccordionItem({ index, children, isAnimated, setAnimated, showSeason, a
             </div>
         </div >
     </>
+}
+
+export class ShowAccordionClass extends React.Component<{ show: LocalShow, activeVideoPath: PathLike, setActiveVideoByPath: Function }, { show: LocalShow, activeVideoPath: PathLike, setActiveVideoByPath: Function, isAnimated: boolean, setAnimated: Function }> {
+
+    constructor({ show, activeVideoPath, setActiveVideoByPath }: { show: LocalShow, activeVideoPath: PathLike, setActiveVideoByPath: Function }) {
+        super({ show, activeVideoPath, setActiveVideoByPath });
+
+        this.state = { show, activeVideoPath, setActiveVideoByPath, isAnimated: false, setAnimated: (val: boolean) => this.setState({ ...this.state, isAnimated: val }) };
+    }
+
+    render() {
+        return <div className="max-w-6xl h-full divide-y-2" >
+            {this.state.show ? (
+                this.state.show.isConventionalShow ?
+                    Object.keys(this.state.show.content).sort(compareAsNumbers).map((seasonNo: string) => <AccordionItem key={seasonNo} index={seasonNo} isAnimated={this.state.isAnimated} setAnimated={this.state.setAnimated} showSeason={(this.state.show.content as LocalShowContent)[seasonNo]} activeVideoPath={this.state.activeVideoPath} setActiveVideoByPath={this.state.setActiveVideoByPath}>
+                        Season {parseInt(seasonNo)}
+                    </AccordionItem>) :
+                    <h1>NOT IMPLEMENTED YET!</h1>
+            ) :
+                <Spinner />}
+        </div>;
+    }
+
 }

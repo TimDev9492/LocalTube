@@ -4,9 +4,15 @@ import { FileConfig, LocalTubeDatabase } from "../backend/structure";
 import { DatabaseManager } from "../backend/DatabaseManager";
 import { ShowDeserializer } from "../backend/ShowDeserializer";
 import { VideoPlayer } from "../backend/VideoPlayer";
-import { stat, access, constants } from 'fs';
+import * as fs from 'fs';
 
-export function handleGetThumbnailBuffer(event: IpcMainEvent, path: PathLike): Promise<Buffer> {
+export function handleGetThumbnailBuffer(event: IpcMainEvent, path: PathLike, directPath: boolean): Promise<Buffer> {
+    if (directPath) {
+        return new Promise<Buffer>((resolve, reject) => fs.readFile(path, (err, data) => {
+            err && reject(err);
+            data && resolve(data);
+        }));
+    }
     return ShowDeserializer.getVideoThumbnailBuffer(path);
 }
 
@@ -22,9 +28,9 @@ export function handleOpenDialog(event: IpcMainEvent, dialogOptions: OpenDialogO
 
 export function handleCheckDirPath(event: IpcMainEvent, path: PathLike): Promise<boolean> {
     return new Promise((resolve, reject) => {
-        stat(path, (err, stats) => {
+        fs.stat(path, (err, stats) => {
             if (!err && stats && stats.isDirectory()) {
-                access(path, constants.R_OK, (err) => {
+                fs.access(path, fs.constants.R_OK, (err) => {
                     if (err) {
                         reject(err);
                         return;

@@ -88,7 +88,7 @@ export function AddShow(): JSX.Element {
 
     return <FileExtensionsContext.Provider value={[fileExtensions, setFileExtensions]}>
         <RegExtractContext.Provider value={[regExtract, setRegExtract]}>
-            <div className="absolute top-0 left-0 w-full h-full select-none transition-colors ease-linear duration-500" style={popupStyle}>
+            <div className="fixed top-0 left-0 w-full h-full select-none transition-colors ease-linear duration-500" style={popupStyle}>
                 <div className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 shadow-lg rounded-2xl p-4 bg-white dark:bg-gray-800 w-96 m-auto transition-all duration-500 ease-in-out" style={{
                     top: showPopup ? '50%' : 'calc(0% - 8rem)',
                 }}>

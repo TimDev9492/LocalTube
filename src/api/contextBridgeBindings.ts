@@ -6,7 +6,7 @@ import { LocalTubeAPI } from "./LocalTubeAPI";
 
 export const buildAPI: Function = (): void => {
     contextBridge.exposeInMainWorld('localtubeAPI', {
-        getThumbnailBuffer: (path: PathLike): Promise<Buffer> => ipcRenderer.invoke('fs:getThumbnailBuffer', path),
+        getThumbnailBuffer: (path: PathLike, directPath: boolean): Promise<Buffer> => ipcRenderer.invoke('fs:getThumbnailBuffer', path, directPath),
         openDialog: (dialogOptions: OpenDialogOptions): Promise<string> => ipcRenderer.invoke('fs:openDialog', dialogOptions),
         checkDirPath: (path: PathLike): Promise<boolean> => ipcRenderer.invoke('fs:checkDirPath', path),
         getRandomFileFromDir: (dirPath: PathLike, fileConfig: FileConfig) => ipcRenderer.invoke('fs:getRandomFileFromDir', dirPath, fileConfig),

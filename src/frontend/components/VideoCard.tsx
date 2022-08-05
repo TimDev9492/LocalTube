@@ -40,7 +40,7 @@ export function VideoCard({ gridCol, video, episodeNo, activeVideoPath, setActiv
             }
         });
 
-        window.localtubeAPI.getThumbnailBuffer(video.path).then(
+        window.localtubeAPI.getThumbnailBuffer(video.path, false).then(
             (bufferData) => converter.getAsBase64(bufferData).then(
                 (base64) => setBase64data(base64),
                 (error) => console.error(error)

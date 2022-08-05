@@ -9,7 +9,7 @@ declare global {
 }
 
 export interface LocalTubeAPI {
-    getThumbnailBuffer: (path: PathLike) => Promise<Buffer>;
+    getThumbnailBuffer: (path: PathLike, directPath: boolean) => Promise<Buffer>;
     openDialog: (dialogOptions: OpenDialogOptions) => Promise<string>;
     checkDirPath: (path: PathLike) => Promise<boolean>;
     getRandomFileFromDir: (dirPath: PathLike, fileConfig: FileConfig) => Promise<PathLike>;

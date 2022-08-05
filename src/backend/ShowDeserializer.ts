@@ -7,6 +7,7 @@ import { app } from "electron";
 import * as child_process from "child_process";
 import * as ffmpeg from "fluent-ffmpeg";
 import * as commandExists from "command-exists";
+import { compareAsNumbers } from "../frontend/utils";
 
 /**
  * A class for serializing objects that are useable by the API
@@ -182,6 +183,9 @@ export class ShowDeserializer {
                 } as LocalVideo;
             }
 
+            let firstSeason: string = Object.keys(content).sort()[0];
+            let firstEpisode: string = Object.keys(content[firstSeason]).sort()[0];
+
             // create metadata for show
             let metadata: LocalShowMetadata = {
                 title: showTitle,
@@ -189,7 +193,7 @@ export class ShowDeserializer {
                 episodeTotal: Object.keys(content).reduce((prevEpisodeTotal: number, currentSeasonNo: string) => prevEpisodeTotal + Object.keys(content[currentSeasonNo]).length, 0),
                 totalDuration: Object.keys(content).reduce((prevTotalDuration: number, currentSeasonNo: string) => prevTotalDuration + Object.keys(content[currentSeasonNo]).reduce((prevEpisodeDuration: number, currentEpisodeNo: string) => prevEpisodeDuration + content[currentSeasonNo][currentEpisodeNo].metadata.duration, 0), 0),
                 // thumbnailPath: ((content['1'])['1'])?.metadata.thumbnailPath,
-                thumbnailPath: '',
+                thumbnailPath: content[firstSeason][firstEpisode].metadata.thumbnailPath,
             };
 
             localShow.content = content;

@@ -1,43 +1,14 @@
 import * as React from 'react';
 import localtubeIcon from '../../../assets/localtube_icon.png';
 import { ShowList } from './ShowList';
-import placeholder from '../../../assets/harddisk.png';
 import { PageContext } from '../LocalTube';
 import { PageContentData, Tab } from './PageContent';
+import { LocalShow } from '../../backend/structure';
 
-const shows = [
-    {
-        title: 'Breaking Bad',
-        imagePath: placeholder,
-        seasonAmount: 5,
-        episodeAmount: 132,
-        duration: 86.2,
-    },
-    {
-        title: 'Queen\'s Gambit',
-        imagePath: placeholder,
-        seasonAmount: 2,
-        episodeAmount: 4,
-        duration: 1.5,
-    },
-    {
-        title: 'Harry Potter',
-        imagePath: placeholder,
-        seasonAmount: 7,
-        episodeAmount: 7,
-        duration: 14.3,
-    },
-    {
-        title: 'Stranger Things',
-        imagePath: placeholder,
-        seasonAmount: 4,
-        episodeAmount: 136,
-        duration: 41.3,
-    },
-]
-
-export default function Header(): JSX.Element {
-    const [searchQuery, setSearchQuery] = React.useState('');
+export default function Header({ shows }: { shows: LocalShow[] }): JSX.Element {
+    const [searchQuery, setSearchQuery] = React.useState<string>('');
+    const [searchFocused, setSearchFocused] = React.useState<boolean>(false);
+    let hideTimeout: NodeJS.Timeout;
 
     return <PageContext.Consumer>
         {([pageContent, setPageContent]) =>
@@ -77,9 +48,9 @@ export default function Header(): JSX.Element {
                             <div className="md:block -mr-2 flex">
                                 <div className="flex flex-col md:flex-row w-3/4 md:w-full max-w-sm md:space-x-3 space-y-3 md:space-y-0 justify-center">
                                     <div className="relative ">
-                                        <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="rounded-lg border-transparent flex-1 appearance-none border border-slate-300 w-full py-2 px-4 bg-white text-slate-700 placeholder-slate-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent" placeholder="Search Shows..." />
+                                        <input onFocus={() => setSearchFocused(true)} onBlur={() => setTimeout(() => setSearchFocused(false), 200)} type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="rounded-lg border-transparent flex-1 appearance-none border border-slate-300 w-full py-2 px-4 bg-white text-slate-700 placeholder-slate-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent" placeholder="Search Shows..." />
                                         <div className="absolute top-full">
-                                            <ShowList shows={shows.filter(show => searchQuery.length && show.title.toLowerCase().includes(searchQuery.toLowerCase()))}></ShowList>
+                                            <ShowList shows={shows.filter(show => (searchQuery.length || searchFocused) && show.metadata.title.toLowerCase().includes(searchQuery.toLowerCase())).map(show => show.metadata)}></ShowList>
                                         </div>
                                     </div>
                                     <button onClick={() => setSearchQuery('')} className="flex-shrink-0 px-4 py-2 text-base font-semibold text-white bg-purple-600 rounded-lg shadow-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-purple-200">
@@ -103,5 +74,4 @@ export default function Header(): JSX.Element {
             </nav>
         }
     </PageContext.Consumer>
-
 }
