@@ -1,5 +1,5 @@
 import { PathLike } from "original-fs";
-import { webContents, WebContents } from "electron";
+import { WebContents } from "electron";
 import luaScript from '../../assets/localtube-timepos.lua';
 import * as child_process from 'child_process';
 import { DatabaseManager } from "./DatabaseManager";
@@ -46,6 +46,7 @@ export class VideoPlayer {
         child.stdout.setEncoding('utf8');
         child.stdout.on('data', (data) => {
             // stdout
+            console.log('stdout', data);
 
             // extract timepos update information from stdout
             if (data.startsWith('[localtube_timepos] ')) {
@@ -56,6 +57,11 @@ export class VideoPlayer {
                 DatabaseManager.updateVideoTimePos(path, timepos);
             }
         });
+
+        child.stderr.on('data', (data) => {
+            // stderr
+            console.log('stderr', data.toString());
+        })
 
         child.on('close', (code) => {
             // notify WebListeners that mpv exited

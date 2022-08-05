@@ -1,11 +1,10 @@
 import { PathLike } from "original-fs";
 import { BrowserWindow, dialog, IpcMainEvent, OpenDialogOptions } from "electron";
-import { LocalTubeDatabase } from "../backend/structure";
+import { FileConfig, LocalTubeDatabase } from "../backend/structure";
 import { DatabaseManager } from "../backend/DatabaseManager";
 import { ShowDeserializer } from "../backend/ShowDeserializer";
 import { VideoPlayer } from "../backend/VideoPlayer";
-import { stat } from 'fs';
-import { startTransition } from "react";
+import { stat, access, constants } from 'fs';
 
 export function handleGetThumbnailBuffer(event: IpcMainEvent, path: PathLike): Promise<Buffer> {
     return ShowDeserializer.getVideoThumbnailBuffer(path);
@@ -24,13 +23,45 @@ export function handleOpenDialog(event: IpcMainEvent, dialogOptions: OpenDialogO
 export function handleCheckDirPath(event: IpcMainEvent, path: PathLike): Promise<boolean> {
     return new Promise((resolve, reject) => {
         stat(path, (err, stats) => {
-            resolve(!err && stats && stats.isDirectory());
+            if (!err && stats && stats.isDirectory()) {
+                access(path, constants.R_OK, (err) => {
+                    if (err) {
+                        reject(err);
+                        return;
+                    }
+                    resolve(true);
+                })
+            } else {
+                resolve(false);
+            }
         });
+    });
+}
+
+export function handleGetRandomFileFromDir(event: IpcMainEvent, dirPath: PathLike, fileConfig: FileConfig): Promise<PathLike> {
+    return new Promise<PathLike>((resolve, reject) => {
+        ShowDeserializer.getVideoFiles(dirPath, fileConfig).then(
+            (videoFiles) => {
+                const randomChoice = videoFiles.length ? videoFiles[Math.floor(Math.random() * videoFiles.length)] : null;
+                resolve(randomChoice !== null ? randomChoice.relativePath : null);
+            },
+            (error) => reject(error)
+        );
     });
 }
 
 export function handleGetDatabase(event: IpcMainEvent): LocalTubeDatabase {
     return DatabaseManager.getDatabase();
+}
+
+export function handleAddShow(event: IpcMainEvent, dirPath: PathLike, fileConfig: FileConfig, isConventionalShow: boolean, showTitle: string): Promise<string> {
+    return new Promise<string>((resolve, reject) => {
+        ShowDeserializer.deserializeShow(dirPath, fileConfig, isConventionalShow, showTitle).then(
+            // add show to database
+            (deserializedShow) => console.log(deserializedShow),
+            (error) => reject(error)
+        );
+    });
 }
 
 export function handleUpdateVideoTimePos(event: IpcMainEvent, videoPath: PathLike, timePos: number): void {
@@ -43,4 +74,12 @@ export function handleOpenMpv(event: IpcMainEvent, path: PathLike, startTime: nu
 
 export function handleSignalMpvTimePosChange(event: IpcMainEvent): void {
     VideoPlayer.addWebContentsListener(event.sender);
+}
+
+/**
+ * DEBUG
+ */
+
+export function handleDebugGetDeserializedShow(event: IpcMainEvent, dirPath: PathLike, fileConfig: FileConfig, isConventionalShow: boolean, showTitle: string) {
+    return ShowDeserializer.deserializeShow(dirPath, fileConfig, isConventionalShow, showTitle);
 }
