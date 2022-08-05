@@ -11,7 +11,7 @@ export const buildAPI: Function = (): void => {
         checkDirPath: (path: PathLike): Promise<boolean> => ipcRenderer.invoke('fs:checkDirPath', path),
         getRandomFileFromDir: (dirPath: PathLike, fileConfig: FileConfig) => ipcRenderer.invoke('fs:getRandomFileFromDir', dirPath, fileConfig),
         getDatabase: (): Promise<LocalTubeDatabase> => ipcRenderer.invoke('db:getDatabase'),
-        addShow: (dirPath: PathLike, fileConfig: FileConfig, isConventionalShow: boolean, showTitle: string): Promise<string> => ipcRenderer.invoke('debug:getDeserializedShow', dirPath, fileConfig, isConventionalShow, showTitle),
+        addShow: (dirPath: PathLike, fileConfig: FileConfig, isConventionalShow: boolean, showTitle: string): Promise<string> => ipcRenderer.invoke('db:addShow', dirPath, fileConfig, isConventionalShow, showTitle),
         updateVideoTimePos: (videoPath: PathLike, timePos: number): void => ipcRenderer.send('db:updateVideoTimePos', videoPath, timePos),
         openMpv: (path: PathLike, startTime: number): void => ipcRenderer.send('os:openMpv', path, startTime),
         signalMpvTimePosChange: (): void => ipcRenderer.send('mpv:listen-timepos'),

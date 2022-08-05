@@ -29,13 +29,18 @@ export function AddShow(): JSX.Element {
     const [showRegSection, setShowRegSection] = React.useState<boolean>(false);
     const [isConventionalShow, setIsConventionalShow] = React.useState<boolean>(true);
     const [conventionalShowTooltip, setConventionalShowTooltip] = React.useState<boolean>(false);
+    const [isAddingShow, setIsAddingShow] = React.useState<boolean>(false);
+    const [popupText, setPopupText] = React.useState<string>('Breaking Bad');
+    const [showPopup, setShowPopup] = React.useState<boolean>(false);
+    const [popupStyle, setPopupStyle] = React.useState({ background: 'rgba(0, 0, 0, 0)', zIndex: -50 });
 
     function btnAddShow() {
         if (!isValidPath) {
             alert('The show directory path you entered is not a valid directory!');
             return;
         }
-        window.localtubeAPI.getDeserializedShow(
+        setIsAddingShow(true);
+        window.localtubeAPI.addShow(
             dirPath,
             {
                 fileExtensions,
@@ -44,9 +49,20 @@ export function AddShow(): JSX.Element {
             } as FileConfig,
             isConventionalShow,
             showName).then(
-                (localShow) => console.log(localShow),
-                (error) => console.error(error)
+                (addedShowTitle) => {
+                    setIsAddingShow(false);
+                    setPopupText(addedShowTitle);
+                    setPopupStyle({ background: 'rgba(0, 0, 0, .5)', zIndex: 50 });
+                    setShowPopup(true);
+                },
+                (error) => alert(error)
             );
+    }
+
+    function onPopupClose() {
+        setShowPopup(false);
+        setPopupStyle({ background: 'rgba(0, 0, 0, 0)', zIndex: 50 });
+        setTimeout(() => setPopupStyle({ background: 'rgba(0, 0, 0, 0)', zIndex: -50 }), 500);
     }
 
     React.useEffect(() => {
@@ -72,6 +88,29 @@ export function AddShow(): JSX.Element {
 
     return <FileExtensionsContext.Provider value={[fileExtensions, setFileExtensions]}>
         <RegExtractContext.Provider value={[regExtract, setRegExtract]}>
+            <div className="absolute top-0 left-0 w-full h-full select-none transition-colors ease-linear duration-500" style={popupStyle}>
+                <div className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 shadow-lg rounded-2xl p-4 bg-white dark:bg-gray-800 w-96 m-auto transition-all duration-500 ease-in-out" style={{
+                    top: showPopup ? '50%' : 'calc(0% - 8rem)',
+                }}>
+                    <div className="w-full h-full text-center">
+                        <div className="flex h-full flex-col justify-between">
+                            <svg className="h-12 w-12 mt-4 m-auto text-green-500" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7">
+                                </path>
+                            </svg>
+                            <p className="text-gray-600 dark:text-gray-100 text-md py-2 px-6">
+                                <span className="font-bold">{popupText}</span>
+                                {' has been successfully added to your local shows!'}
+                            </p>
+                            <div className="flex items-center justify-between gap-4 w-full mt-8">
+                                <button onClick={() => onPopupClose()} type="button" className="py-2 px-4  bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg ">
+                                    Close
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div className="text-xl font-light text-slate-600 sm:text-2xl dark:text-white select-none flex flex-col xl:min-w-6xl w-3/5 px-4 py-8 rounded-lg shadow dark:bg-slate-800 sm:px-6 md:px-8 lg:px-10">
                 <div className="self-center text-3xl">
                     Add a show
@@ -94,7 +133,7 @@ export function AddShow(): JSX.Element {
                                 </path>
                             </svg>}
                     </div>
-                    <button onClick={browseBtnClick} value={dirPath} type="button" className="py-2 px-4 flex gap-2 justify-center items-center  bg-red-500 hover:bg-red-700 focus:ring-red-500 focus:ring-offset-red-200 text-white transition ease-in duration-100 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg">
+                    <button onClick={browseBtnClick} type="button" className="py-2 px-4 flex gap-2 justify-center items-center  bg-red-500 hover:bg-red-700 focus:ring-red-500 focus:ring-offset-red-200 text-white transition ease-in duration-100 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg">
                         <svg role="arrow" className="inline h-5 w-5 dark:fill-white"
                             viewBox="0 0 46 46" fill="none">
                             <path d="M20.701,11c-0.425,0-0.809-0.253-0.977-0.644l-1.395-3.255C17.523,5.22,15.673,4,13.626,4H5.117C2.291,4,0,6.291,0,9.117
@@ -152,16 +191,26 @@ export function AddShow(): JSX.Element {
                     </RegExtractContext.Consumer>
                 </div>
                 <div className="flex items-center justify-center mt-6">
-                    <button onClick={() => btnAddShow()} type="button" className="py-2 px-4 flex gap-2 justify-center items-center  bg-green-500 hover:bg-green-600 focus:ring-green-500 focus:ring-offset-green-200 text-white transition ease-in duration-100 text-center text-2xl font-medium shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg">
-                        <svg role="add" className="inline h-5 w-5 dark:fill-white dark:group-hover:fill-white"
-                            viewBox="0 0 60.364 60.364" fill="none">
-                            <path d="M54.454,23.18l-18.609-0.002L35.844,5.91C35.845,2.646,33.198,0,29.934,0c-3.263,0-5.909,2.646-5.909,5.91v17.269
+                    <button onClick={() => btnAddShow()} type="button" className="py-2 px-4 flex gap-2 justify-center items-center  bg-green-500 fill-green-500 hover:bg-green-600 hover:fill-green-600 focus:ring-green-500 focus:ring-offset-green-200 text-white transition ease-in duration-100 text-center text-2xl font-medium shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg">
+                        {isAddingShow ?
+                            <>
+                                <div className="w-6 h-6 m-auto flex gap-4">
+                                    <Spinner white />
+                                </div>
+                                Adding show...
+                            </> :
+                            <>
+                                <svg role="add" className="inline h-5 w-5 dark:fill-white"
+                                    viewBox="0 0 60.364 60.364" fill="none">
+                                    <path d="M54.454,23.18l-18.609-0.002L35.844,5.91C35.845,2.646,33.198,0,29.934,0c-3.263,0-5.909,2.646-5.909,5.91v17.269
 		L5.91,23.178C2.646,23.179,0,25.825,0,29.088c0.002,3.264,2.646,5.909,5.91,5.909h18.115v19.457c0,3.267,2.646,5.91,5.91,5.91
 		c3.264,0,5.909-2.646,5.91-5.908V34.997h18.611c3.262,0,5.908-2.645,5.908-5.907C60.367,25.824,57.718,23.178,54.454,23.18z"/>
-                        </svg>
-                        Add the show!
+                                </svg>
+                                Add the show!
+                            </>}
                     </button>
                 </div>
+                {isAddingShow && <div className="text-center w-full mt-2 text-sm italic text-slate-500">Depending on the size of the show, this may take a few seconds</div>}
             </div >
         </RegExtractContext.Provider>
     </FileExtensionsContext.Provider>
@@ -172,7 +221,6 @@ function FileExtensionsDropdown(): JSX.Element {
     const options = ['mkv', 'mp4', 'mov', 'avi', 'flv', 'wmv', 'avchd', 'webm', 'mpeg-4'];
 
     const toggleOption: any = (option: string, fileExtensions: string[], setFileExtensions: Function) => {
-        console.log(option);
         const newArr: string[] = [];
         fileExtensions.forEach(fileExtension => fileExtension !== option && newArr.push(fileExtension));
         if (!fileExtensions.includes(option)) newArr.push(option);

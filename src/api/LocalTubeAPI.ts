@@ -14,6 +14,7 @@ export interface LocalTubeAPI {
     checkDirPath: (path: PathLike) => Promise<boolean>;
     getRandomFileFromDir: (dirPath: PathLike, fileConfig: FileConfig) => Promise<PathLike>;
     getDatabase: () => Promise<LocalTubeDatabase>;
+    addShow: (dirPath: PathLike, fileConfig: FileConfig, isConventionalShow: boolean, showTitle: string) => Promise<string>;
     updateVideoTimePos: (videoPath: PathLike, timePos: number) => void;
     openMpv: (path: PathLike, startTime: number) => void;
     signalMpvTimePosChange: () => void;

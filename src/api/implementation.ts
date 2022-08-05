@@ -58,7 +58,10 @@ export function handleAddShow(event: IpcMainEvent, dirPath: PathLike, fileConfig
     return new Promise<string>((resolve, reject) => {
         ShowDeserializer.deserializeShow(dirPath, fileConfig, isConventionalShow, showTitle).then(
             // add show to database
-            (deserializedShow) => console.log(deserializedShow),
+            (deserializedShow) => {
+                DatabaseManager.addShowToDatabase(deserializedShow);
+                resolve(deserializedShow.metadata.title);
+            },
             (error) => reject(error)
         );
     });

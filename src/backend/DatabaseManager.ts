@@ -85,6 +85,14 @@ export class DatabaseManager {
     }
 
     /**
+     * Adds a show to the database
+     * @param localShow {LocalShow} The LocalShow object to be added
+     */
+    public static addShowToDatabase(localShow: LocalShow) {
+        DatabaseManager.database.shows.push(localShow);
+    }
+
+    /**
      * Store a new timepos for a video file in the database
      * @param videoPath {PathLike} The absolute path of the video file
      * @param timePos The new timepos

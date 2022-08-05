@@ -50,7 +50,7 @@ export default function Header(): JSX.Element {
                             </a>
                             <div className="hidden md:block">
                                 <div className="ml-10 flex items-baseline space-x-4">
-                                    <div onClick={() => setPageContent(new PageContentData(Tab.Show, 'Breaking Bad'))} className="group cursor-pointer flex items-center text-slate-300  hover:text-slate-800 dark:hover:text-white px-3 py-2 rounded-md text-md font-medium">
+                                    <div onClick={() => setPageContent(new PageContentData(Tab.Show, 'Stranger Things S4'))} className="group cursor-pointer flex items-center text-slate-300  hover:text-slate-800 dark:hover:text-white px-3 py-2 rounded-md text-md font-medium">
                                         <svg role="add" className="inline h-4 w-4 mr-2 dark:fill-slate-300 dark:group-hover:fill-white"
                                             viewBox="0 0 330.242 330.242" fill="none">
                                             <path d="M324.442,129.811l-41.321-33.677V42.275c0-6.065-4.935-11-11-11h-26c-6.065,0-11,4.935-11,11v14.737l-55.213-44.999
