@@ -48,14 +48,20 @@ export class DatabaseManager {
 
             // read file into JSON object
             DatabaseManager.database = JSON.parse(fs.readFileSync(DatabaseManager.databasePath).toString());
-            
+
             // parse regex strings to regular expressions
-            // DatabaseManager.database.shows.forEach(show => {
-            //     if (show.fileConfig && show.fileConfig.regExtract && show.fileConfig.regExtract.regex) {
-            //         let parts = (show.fileConfig.regExtract.regex as unknown as string).split(/(?<!\\)\//);
-            //         show.fileConfig.regExtract.regex = new RegExp(parts[1], parts[2]);
-            //     }
-            // });
+            DatabaseManager.database.shows.forEach(show => {
+                if (show.fileConfig && show.fileConfig.regExtract && show.fileConfig.regExtract.regex) {
+                    let parts = show.fileConfig.regExtract.regex.toString().split(/(?<!\\)\//);
+                    if (parts.length > 2)
+                        show.fileConfig.regExtract.regex = new RegExp(parts[1], parts[2]);
+                }
+                if (show.fileConfig && show.fileConfig.regExtract && show.fileConfig.regExtract.titleReplace && show.fileConfig.regExtract.titleReplace.searchValue) {
+                    let parts = show.fileConfig.regExtract.titleReplace.searchValue.toString().split(/(?<!\\)\//);
+                    if (parts.length > 2)
+                        show.fileConfig.regExtract.titleReplace.searchValue = new RegExp(parts[1], parts[2]);
+                }
+            });
         }
     }
 
