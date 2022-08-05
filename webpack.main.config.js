@@ -1,4 +1,5 @@
 const webpack = require('webpack');
+const WebpackShellPluginNext = require('webpack-shell-plugin-next');
 
 module.exports = {
   /**
@@ -16,6 +17,28 @@ module.exports = {
   plugins: [
     new webpack.DefinePlugin({
       'process.env.FLUENTFFMPEG_COV': false
+    }),
+    // new WebpackShellPluginNext({
+    //   onBuildStart: {
+    //     scripts: ['echo "Webpack Start"'],
+    //   },
+    //   onBuildEnd: [
+    //     'echo "Webpack Start"',
+    //     'chmod +x .webpack/main/native_modules/ffmpeg',
+    //     'chmod +x .webpack/main/native_modules/ffprobe',
+    //     `echo "${__dirname}"`
+    //   ]
+    // })
+    new WebpackShellPluginNext({
+
+      onBuildEnd: {
+        scripts: [
+          'chmod +x .webpack/main/native_modules/ffmpeg',
+          'chmod +x .webpack/main/native_modules/ffprobe',
+        ],
+        blocking: false,
+        parallel: true
+      }
     }),
   ]
 };
