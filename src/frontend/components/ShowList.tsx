@@ -30,14 +30,14 @@ export function ShowCard({ title, thumbnailPath, seasonTotal, episodeTotal, tota
         {([pageContent, setPageContent]) => <li className="z-30 group flex flex-row">
             <div onClick={() => { setPageContent(new PageContentData(Tab.Show, title)); console.log(title) }} className="select-none cursor-pointer flex flex-1 items-center p-4 dark:hover:bg-slate-600 transition-colors rounded">
                 <div className="flex flex-col w-12 h-12 justify-center items-center mr-4">
-                    <img alt="profil" src={base64data ? `data:image/jpg;base64,${base64data}` : placeholder} className="object-cover rounded-lg h-full w-full " />
+                    <img alt="profil" draggable="false" src={base64data ? `data:image/jpg;base64,${base64data}` : placeholder} className="object-cover rounded-lg h-full w-full " />
                 </div>
                 <div className="flex-1 pl-1 mr-8 w-48">
                     <div className="font-medium dark:text-white">
                         {title}
                     </div>
                     <div className="text-slate-600 dark:text-slate-200 text-sm">
-                        {`${seasonTotal} season${seasonTotal !== 1 ? 's' : ''}, ${episodeTotal} episode${episodeTotal !== 1 && 's'}`}
+                        {`${seasonTotal} season${seasonTotal !== 1 ? 's' : ''}, ${episodeTotal} episode${episodeTotal !== 1 ? 's' : ''}`}
                     </div>
                 </div>
                 <div className="text-slate-600 dark:text-slate-200 text-xs">

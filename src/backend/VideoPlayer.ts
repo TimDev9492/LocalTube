@@ -46,7 +46,7 @@ export class VideoPlayer {
         child.stdout.setEncoding('utf8');
         child.stdout.on('data', (data) => {
             // stdout
-            // console.log('stdout', data);
+            console.log('stdout', data);
 
             // extract timepos update information from stdout
             if (data.startsWith('[localtube_timepos] ')) {
@@ -58,10 +58,10 @@ export class VideoPlayer {
             }
         });
 
-        // child.stderr.on('data', (data) => {
-        //     // stderr
-        //     console.log('stderr', data.toString());
-        // })
+        child.stderr.on('data', (data) => {
+            // stderr
+            console.log('stderr', data.toString());
+        })
 
         child.on('close', (code) => {
             // notify WebListeners that mpv exited

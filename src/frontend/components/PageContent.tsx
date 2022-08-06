@@ -1,8 +1,10 @@
 import { PathLike } from 'original-fs';
 import * as React from 'react';
 import { LocalShow, LocalTubeDatabase } from '../../backend/structure';
+import { DatabaseContext } from '../LocalTube';
 import { AddShow } from './tabs/AddShow';
-import { ShowAccordion, ShowAccordionClass } from './tabs/ShowAccordion';
+import { Overview } from './tabs/Overview';
+import { ShowAccordion } from './tabs/ShowAccordion';
 
 export enum Tab {
     Home,
@@ -47,12 +49,18 @@ export default function PageContent({ database, contentData }: { database: Local
             case Tab.Show:
                 // if in show tab, the data attribute of contentData contains the name of the show
                 setContentData(database.shows.find(show => show.metadata.title === contentData.getData()));
+                console.log('db', database);
+                console.log('data', database.shows.find(show => show.metadata.title === contentData.getData()));
+                break;
+            case Tab.Home:
+                setContentData(database.shows);
                 break;
         }
     }, [contentData, database]);
 
     return <div className="dark:bg-slate-700 flex items-center justify-center flex-1 p-16">
         {contentData.getTab() === Tab.Show && <ShowAccordion activeVideoPath={activeVideoPath} setActiveVideoByPath={setActiveVideoByPath} show={data as LocalShow} />}
-        {contentData.getTab() === Tab.Add && <AddShow />}
+        {contentData.getTab() === Tab.Add && <DatabaseContext.Consumer>{([database, pullDatabase]) => <AddShow pullDatabase={pullDatabase} />}</DatabaseContext.Consumer>}
+        {contentData.getTab() === Tab.Home && <Overview shows={data as LocalShow[]} />}
     </div>
 }

@@ -8,7 +8,7 @@ import Spinner from '../Spinner';
 const FileExtensionsContext = React.createContext<[fileExtensions: string[], setPageContent: Function]>([null, null]);
 const RegExtractContext = React.createContext<[regExtract: RegExtractConfig, setRegExtract: Function]>([null, null]);
 
-export function AddShow(): JSX.Element {
+export function AddShow({ pullDatabase }: { pullDatabase: Function }): JSX.Element {
     const [showName, setShowName] = React.useState<string>('');
     const [isValidShowName, setIsValidShowName] = React.useState<boolean>(false);
     const [dirPath, setDirPath] = React.useState<string>('');
@@ -70,6 +70,7 @@ export function AddShow(): JSX.Element {
                     setPopupText(addedShowTitle);
                     setPopupStyle({ background: 'rgba(0, 0, 0, .5)', zIndex: 50 });
                     setShowPopup(true);
+                    pullDatabase();
                 },
                 (error) => alert(error)
             );

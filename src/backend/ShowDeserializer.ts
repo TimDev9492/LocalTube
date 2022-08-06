@@ -192,7 +192,6 @@ export class ShowDeserializer {
                 seasonTotal: Object.keys(content).length,
                 episodeTotal: Object.keys(content).reduce((prevEpisodeTotal: number, currentSeasonNo: string) => prevEpisodeTotal + Object.keys(content[currentSeasonNo]).length, 0),
                 totalDuration: Object.keys(content).reduce((prevTotalDuration: number, currentSeasonNo: string) => prevTotalDuration + Object.keys(content[currentSeasonNo]).reduce((prevEpisodeDuration: number, currentEpisodeNo: string) => prevEpisodeDuration + content[currentSeasonNo][currentEpisodeNo].metadata.duration, 0), 0),
-                // thumbnailPath: ((content['1'])['1'])?.metadata.thumbnailPath,
                 thumbnailPath: content[firstSeason][firstEpisode].metadata.thumbnailPath,
             };
 
@@ -231,8 +230,7 @@ export class ShowDeserializer {
                 seasonTotal: 0,
                 episodeTotal: content.length,
                 totalDuration: content.reduce((prevTotalDuration: number, currentVideo: LocalVideo) => prevTotalDuration + currentVideo.metadata.duration, 0),
-                // thumbnailPath: ((content['1'])['1'])?.metadata.thumbnailPath,
-                thumbnailPath: '',
+                thumbnailPath: content[0].metadata.thumbnailPath,
             };
 
             localShow.content = content;
