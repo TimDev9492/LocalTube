@@ -54,6 +54,8 @@ export default function PageContent({ database, contentData }: { database: Local
                 break;
             case Tab.Home:
                 setContentData(database.shows);
+                console.log('db', database);
+                console.log('data', data);
                 break;
         }
     }, [contentData, database]);

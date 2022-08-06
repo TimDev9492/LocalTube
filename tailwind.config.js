@@ -9,6 +9,15 @@ module.exports = {
             fontFamily: {
                 jetbrains: ['JetBrainsMono'],
             },
+            keyframes: {
+                wiggle: {
+                    '0%, 100%': { transform: 'rotate(-3deg)' },
+                    '50%': { transform: 'rotate(3deg)' },
+                }
+            },
+            animation: {
+                wiggle: 'wiggle 10s ease-in-out infinite',
+            },
         },
     },
     variants: {},

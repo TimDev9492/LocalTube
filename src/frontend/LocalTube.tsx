@@ -12,7 +12,7 @@ export const PageContext = React.createContext<[pageContent: PageContentData, se
 export default function LocalTube(): JSX.Element {
     React.useEffect(() => {
         window.localtubeAPI.signalMpvTimePosChange();
-        pullDatabase();
+        // pullDatabase();
     }, []);
 
     const pullDatabase = (): void => {
@@ -24,6 +24,10 @@ export default function LocalTube(): JSX.Element {
 
     const [pageContent, setPageContent] = React.useState<PageContentData>(new PageContentData(Tab.Home, null));
     const [databaseContent, setDatabaseContent] = React.useState<LocalTubeDatabase>({ shows: [] });
+
+    React.useEffect(() => {
+        pullDatabase();
+    }, [pageContent])
 
     return <DatabaseContext.Provider value={[databaseContent, pullDatabase]}>
         <PageContext.Provider value={[pageContent, setPageContent]}>
