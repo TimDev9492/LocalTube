@@ -11,18 +11,18 @@ LocalTube lets you organize your local video files into shows. You can configure
 
 You can find prebuilt binaries under [releases](https://github.com/TimDev9492/LocalTube/releases).
 
-**Linux**
+### Linux
 
 Download the AppImage and run it using
 ```sh
 ./path/to/downloaded.AppImage
 ```
 
-**Windows / MacOS**
+### Windows / MacOS
 
 Not yet availabe.
 
-**⚠ Requirements**
+### ⚠ Requirements
 
 You need to have [mpv](https://mpv.io) installed on your system as its the video player that LocalTube uses to launch your videos.
 
