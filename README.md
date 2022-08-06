@@ -1,7 +1,7 @@
 LocalTube
 ==
 
-![icon](./assets/localtube_icon.png)
+<img src="./assets/localtube_icon.png" alt="logo" style="width: 256px;" />
 
 A cross-platform desktop application that simplifies watching your favorite movies and/or shows stored on your local drive with [mpv](https://mpv.io), built with [Electron](https://github.com/electron/electron).
 
