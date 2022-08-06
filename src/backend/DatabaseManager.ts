@@ -85,11 +85,22 @@ export class DatabaseManager {
     }
 
     /**
-     * Adds a show to the database
+     * Add a show to the database
      * @param localShow {LocalShow} The LocalShow object to be added
      */
     public static addShowToDatabase(localShow: LocalShow) {
         DatabaseManager.database.shows.push(localShow);
+    }
+
+    /**
+     * Delete a show from the database
+     * @param showName {string} The name of the show
+     * @returns {LocalShow} The deleted show
+     */
+    public static deleteShowFromDatabase(showName: string): LocalShow {
+        let indexToRemove = DatabaseManager.database.shows.findIndex((show) => show.metadata.title === showName);
+        if (indexToRemove === -1) return null;
+        return DatabaseManager.database.shows.splice(indexToRemove, 1)[0];
     }
 
     /**

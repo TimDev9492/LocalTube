@@ -1,7 +1,7 @@
 import { contextBridge, ipcMain, IpcRenderer, ipcRenderer, OpenDialogOptions } from "electron";
 import { PathLike } from "original-fs";
 import { FileConfig, LocalShow, LocalTubeDatabase } from "../backend/structure";
-import { handleCheckShowName, handleAddShow, handleDebugGetDeserializedShow, handleGetRandomFileFromDir, handleCheckDirPath, handleOpenDialog, handleUpdateVideoTimePos, handleSignalMpvTimePosChange, handleOpenMpv, handleGetThumbnailBuffer, handleGetDatabase } from "./implementation";
+import { handleDeleteShow, handleCheckShowName, handleAddShow, handleDebugGetDeserializedShow, handleGetRandomFileFromDir, handleCheckDirPath, handleOpenDialog, handleUpdateVideoTimePos, handleSignalMpvTimePosChange, handleOpenMpv, handleGetThumbnailBuffer, handleGetDatabase } from "./implementation";
 import { LocalTubeAPI } from "./LocalTubeAPI";
 
 export const buildAPI: Function = (): void => {
@@ -13,6 +13,7 @@ export const buildAPI: Function = (): void => {
         checkShowName: (showName: string): Promise<boolean> => ipcRenderer.invoke('db:checkShowName', showName),
         getDatabase: (): Promise<LocalTubeDatabase> => ipcRenderer.invoke('db:getDatabase'),
         addShow: (dirPath: PathLike, fileConfig: FileConfig, isConventionalShow: boolean, showTitle: string): Promise<string> => ipcRenderer.invoke('db:addShow', dirPath, fileConfig, isConventionalShow, showTitle),
+        deleteShow: (showName: string): Promise<LocalShow> => ipcRenderer.invoke('db:deleteShow', showName),
         updateVideoTimePos: (videoPath: PathLike, timePos: number): void => ipcRenderer.send('db:updateVideoTimePos', videoPath, timePos),
         openMpv: (path: PathLike, startTime: number): void => ipcRenderer.send('os:openMpv', path, startTime),
         signalMpvTimePosChange: (): void => ipcRenderer.send('mpv:listen-timepos'),
@@ -32,6 +33,7 @@ export const initializeBindings: Function = (): void => {
     ipcMain.handle('db:checkShowName', handleCheckShowName);
     ipcMain.handle('db:getDatabase', handleGetDatabase);
     ipcMain.handle('db:addShow', handleAddShow);
+    ipcMain.handle('db:deleteShow', handleDeleteShow);
     ipcMain.on('db:updateVideoTimePos', handleUpdateVideoTimePos);
     ipcMain.on('os:openMpv', handleOpenMpv);
     ipcMain.on('mpv:listen-timepos', handleSignalMpvTimePosChange);

@@ -10,7 +10,7 @@ import Spinner from '../Spinner';
 
 export function Overview({ shows, pullDatabase }: { shows: LocalShow[], pullDatabase: Function }): JSX.Element {
     const [popupText, setPopupText] = React.useState<string>('Breaking Bad');
-    const [showPopup, setShowPopup] = React.useState<boolean>(true);
+    const [showPopup, setShowPopup] = React.useState<boolean>(false);
     const [popupStyle, setPopupStyle] = React.useState({ background: 'rgba(0, 0, 0, 0)', zIndex: -50 });
     const [isDeleting, setIsDeleting] = React.useState(false);
 
@@ -26,8 +26,7 @@ export function Overview({ shows, pullDatabase }: { shows: LocalShow[], pullData
             (notExists) => {
                 if (notExists) { setIsDeleting(false); onPopupClose(); }
                 else {
-                    // window.localtubeAPI.deleteShow(showName).finally(() => { setIsDeleting(false); pullDatabase(); onPopupClose(); })
-                    setTimeout(() => { setIsDeleting(false); pullDatabase(); onPopupClose(); }, 2000);
+                    window.localtubeAPI.deleteShow(showName).finally(() => { setIsDeleting(false); pullDatabase(); onPopupClose(); })
                 }
             },
             (error) => { console.error(error); setIsDeleting(false); onPopupClose(); }

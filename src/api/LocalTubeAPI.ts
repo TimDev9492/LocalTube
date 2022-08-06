@@ -16,6 +16,7 @@ export interface LocalTubeAPI {
     checkShowName: (showName: string) => Promise<boolean>;
     getDatabase: () => Promise<LocalTubeDatabase>;
     addShow: (dirPath: PathLike, fileConfig: FileConfig, isConventionalShow: boolean, showTitle: string) => Promise<string>;
+    deleteShow: (showName: string) => Promise<LocalShow>;
     updateVideoTimePos: (videoPath: PathLike, timePos: number) => void;
     openMpv: (path: PathLike, startTime: number) => void;
     signalMpvTimePosChange: () => void;

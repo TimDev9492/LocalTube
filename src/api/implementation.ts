@@ -1,6 +1,6 @@
 import { PathLike } from "original-fs";
 import { BrowserWindow, dialog, IpcMainEvent, OpenDialogOptions } from "electron";
-import { FileConfig, LocalTubeDatabase } from "../backend/structure";
+import { FileConfig, LocalShow, LocalTubeDatabase } from "../backend/structure";
 import { DatabaseManager } from "../backend/DatabaseManager";
 import { ShowDeserializer } from "../backend/ShowDeserializer";
 import { VideoPlayer } from "../backend/VideoPlayer";
@@ -75,6 +75,10 @@ export function handleAddShow(event: IpcMainEvent, dirPath: PathLike, fileConfig
             (error) => reject(error)
         );
     });
+}
+
+export function handleDeleteShow(event: IpcMainEvent, showName: string): LocalShow {
+    return DatabaseManager.deleteShowFromDatabase(showName);
 }
 
 export function handleUpdateVideoTimePos(event: IpcMainEvent, videoPath: PathLike, timePos: number): void {
