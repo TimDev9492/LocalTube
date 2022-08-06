@@ -33,7 +33,7 @@ export default function LocalTube(): JSX.Element {
         <PageContext.Provider value={[pageContent, setPageContent]}>
             <div className="min-h-screen flex flex-col">
                 <Header shows={databaseContent.shows} />
-                <PageContent database={databaseContent} contentData={pageContent} />
+                <PageContent database={databaseContent} pullDatabase={pullDatabase} contentData={pageContent} />
             </div>
         </PageContext.Provider>
     </DatabaseContext.Provider>

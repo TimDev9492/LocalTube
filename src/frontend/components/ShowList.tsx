@@ -27,7 +27,7 @@ export function ShowCard({ title, thumbnailPath, seasonTotal, episodeTotal, tota
     }, []);
 
     return <PageContext.Consumer>
-        {([pageContent, setPageContent]) => <li className="z-30 group flex flex-row">
+        {([pageContent, setPageContent]) => <li className="group flex flex-row z-50">
             <div onClick={() => { setPageContent(new PageContentData(Tab.Show, title)); console.log(title) }} className="select-none cursor-pointer flex flex-1 items-center p-4 dark:hover:bg-slate-600 transition-colors rounded">
                 <div className="flex flex-col w-12 h-12 justify-center items-center mr-4">
                     <img alt="profil" draggable="false" src={base64data ? `data:image/jpg;base64,${base64data}` : placeholder} className="object-cover rounded-lg h-full w-full " />

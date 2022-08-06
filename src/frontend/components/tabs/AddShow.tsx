@@ -31,7 +31,7 @@ export function AddShow({ pullDatabase }: { pullDatabase: Function }): JSX.Eleme
     const [isConventionalShow, setIsConventionalShow] = React.useState<boolean>(true);
     const [conventionalShowTooltip, setConventionalShowTooltip] = React.useState<boolean>(false);
     const [isAddingShow, setIsAddingShow] = React.useState<boolean>(false);
-    const [popupText, setPopupText] = React.useState<string>('Breaking Bad');
+    const [popupText, setPopupText] = React.useState<string>('');
     const [showPopup, setShowPopup] = React.useState<boolean>(false);
     const [popupStyle, setPopupStyle] = React.useState({ background: 'rgba(0, 0, 0, 0)', zIndex: -50 });
 

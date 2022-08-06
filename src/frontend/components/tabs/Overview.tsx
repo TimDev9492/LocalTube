@@ -6,9 +6,63 @@ import settings from '../../../settings';
 import icon from '../../../../assets/localtube_icon.png';
 import { PageContext } from '../../../frontend/LocalTube';
 import { PageContentData, Tab } from '../PageContent';
+import Spinner from '../Spinner';
 
-export function Overview({ shows }: { shows: LocalShow[] }): JSX.Element {
+export function Overview({ shows, pullDatabase }: { shows: LocalShow[], pullDatabase: Function }): JSX.Element {
+    const [popupText, setPopupText] = React.useState<string>('Breaking Bad');
+    const [showPopup, setShowPopup] = React.useState<boolean>(true);
+    const [popupStyle, setPopupStyle] = React.useState({ background: 'rgba(0, 0, 0, 0)', zIndex: -50 });
+    const [isDeleting, setIsDeleting] = React.useState(false);
+
+    function onPopupClose() {
+        setShowPopup(false);
+        setPopupStyle({ background: 'rgba(0, 0, 0, 0)', zIndex: 50 });
+        setTimeout(() => setPopupStyle({ background: 'rgba(0, 0, 0, 0)', zIndex: -50 }), 500);
+    }
+
+    function btnDelShow(showName: string) {
+        setIsDeleting(true);
+        window.localtubeAPI.checkShowName(showName).then(
+            (notExists) => {
+                if (notExists) { setIsDeleting(false); onPopupClose(); }
+                else {
+                    // window.localtubeAPI.deleteShow(showName).finally(() => { setIsDeleting(false); pullDatabase(); onPopupClose(); })
+                    setTimeout(() => { setIsDeleting(false); pullDatabase(); onPopupClose(); }, 2000);
+                }
+            },
+            (error) => { console.error(error); setIsDeleting(false); onPopupClose(); }
+        );
+    }
+
     return <div className="max-w-6xl h-full text-lg select-none">
+        <div className="fixed top-0 left-0 w-full h-full select-none transition-colors ease-linear duration-500" style={popupStyle}>
+            <div className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 shadow-lg rounded-2xl p-4 bg-white dark:bg-gray-800 w-96 m-auto transition-all duration-500 ease-in-out" style={{
+                top: showPopup ? '50%' : 'calc(0% - 8rem)',
+            }}>
+                <div className="w-full h-full text-center">
+                    <div className="flex h-full flex-col justify-between">
+                        <svg width="40" height="40" className="mt-4 w-12 h-12 m-auto text-indigo-500" fill="currentColor" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M704 1376v-704q0-14-9-23t-23-9h-64q-14 0-23 9t-9 23v704q0 14 9 23t23 9h64q14 0 23-9t9-23zm256 0v-704q0-14-9-23t-23-9h-64q-14 0-23 9t-9 23v704q0 14 9 23t23 9h64q14 0 23-9t9-23zm256 0v-704q0-14-9-23t-23-9h-64q-14 0-23 9t-9 23v704q0 14 9 23t23 9h64q14 0 23-9t9-23zm-544-992h448l-48-117q-7-9-17-11h-317q-10 2-17 11zm928 32v64q0 14-9 23t-23 9h-96v948q0 83-47 143.5t-113 60.5h-832q-66 0-113-58.5t-47-141.5v-952h-96q-14 0-23-9t-9-23v-64q0-14 9-23t23-9h309l70-167q15-37 54-63t79-26h320q40 0 79 26t54 63l70 167h309q14 0 23 9t9 23z">
+                            </path>
+                        </svg>
+                        <p className="text-gray-800 dark:text-gray-200 text-xl font-bold mt-4">
+                            Remove show
+                        </p>
+                        <p className="text-gray-600 dark:text-gray-400 text-xs py-2 px-6">
+                            Are you sure you want to delete <b>{popupText}</b>?
+                        </p>
+                        <div className="flex items-center justify-between gap-4 w-full mt-8">
+                            <button disabled={isDeleting} onClick={() => btnDelShow(popupText)} type="button" className="py-2 px-4  bg-indigo-600 fill-indigo-600 hover:bg-indigo-700 hover:fill-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg ">
+                                {isDeleting ? <div className="h-6 w-6 flex gap-4"><Spinner white />Deleting...</div> : 'Delete'}
+                            </button>
+                            <button disabled={isDeleting} onClick={() => onPopupClose()} type="button" className="py-2 px-4  bg-white hover:bg-gray-100 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-indigo-500 w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg ">
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div className="fixed top-1/3 left-3/4 -translate-x-1/2 translate-y-1/4 opacity-20">
             <img className="rotate-6" draggable="false" src={icon} />
         </div>
@@ -27,10 +81,13 @@ export function Overview({ shows }: { shows: LocalShow[] }): JSX.Element {
                                 <th scope="col" className="px-5 py-3 bg-slate-800  border-b border-slate-700 text-slate-400  text-left uppercase font-normal">
                                     Watched
                                 </th>
+                                <th scope="col" className="px-5 py-3 bg-slate-800  border-b border-slate-700 text-slate-400  text-left uppercase font-normal">
+                                    Delete
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
-                            {shows.map(show => <ShowListEntry key={show.metadata.title} show={show}></ShowListEntry>)}
+                            {shows.map(show => <ShowListEntry key={show.metadata.title} show={show} setPopupText={setPopupText} setPopupStyle={setPopupStyle} setShowPopup={setShowPopup}></ShowListEntry>)}
                         </tbody>
                     </table>
                 </div>
@@ -91,11 +148,17 @@ export function Overview({ shows }: { shows: LocalShow[] }): JSX.Element {
     </div>
 }
 
-function ShowListEntry({ show }: { show: LocalShow }) {
+function ShowListEntry({ show, setPopupText, setPopupStyle, setShowPopup }: { show: LocalShow, setPopupText: Function, setPopupStyle: Function, setShowPopup: Function }) {
     const [base64data, setBase64data] = React.useState<string>(null);
     const percentage = show.isConventionalShow ?
         Math.round(100 * getWatchTimeFromShowContent(show.content as LocalShowContent) / show.metadata.totalDuration) :
         Math.round(100 * getWatchTimeFromVideos(show.content as LocalVideo[]) / show.metadata.totalDuration);
+
+    function delBtnClick() {
+        setPopupText(show.metadata.title);
+        setPopupStyle({ background: 'rgba(0, 0, 0, .5)', zIndex: 50 });
+        setShowPopup(true);
+    }
 
     function getWatchTimeFromVideos(videos: LocalVideo[]) {
         return videos.reduce((previousWatchTime: number, video: LocalVideo) => previousWatchTime + getWatchTimeOfEpisode(video), 0);
@@ -169,13 +232,25 @@ function ShowListEntry({ show }: { show: LocalShow }) {
                         </div>
                     </div>
                 </td>
-                <td className="pl-5 pr-32 py-5 border-b border-slate-700 text-sm">
+                <td className="pl-5 pr-16 py-5 border-b border-slate-700 text-sm">
                     <div className="flex items-center text-slate-200  px-2.5 py-1.5 text-sm font-medium dark:bg-red-500 rounded-full w-fit">
                         <svg role="add" className="inline h-4 w-4 mr-1 dark:fill-slate-200"
                             viewBox="0 0 20 20" fill="none">
                             <path d="M9.0971295,8.03755188 L9.0971295,2.84790039 C9.13471211,2.50546265 9.32401021,2.28468831 9.6650238,2.18557739 C10.0060374,2.08646647 10.3434812,2.17325872 10.6773552,2.44595413 L18.762796,9.28367933 C18.985685,9.48122766 19.0971295,9.72000122 19.0971295,10 C19.0971295,10.2799988 18.985685,10.5192994 18.762796,10.717902 L10.6237488,17.6020203 C10.2899882,17.8323466 9.96312968,17.9007416 9.64317322,17.8072052 C9.32321676,17.7136688 9.14120218,17.5091349 9.0971295,17.1936035 L9.0971295,11.9564819 L2.48309625,17.5543198 C2.15246682,17.8183996 1.80385844,17.9026947 1.43727112,17.8072052 C1.0706838,17.7117157 0.892550258,17.5071818 0.902870501,17.1936035 L0.902870501,2.93100117 C0.89243836,2.60200039 1.04287211,2.36458333 1.35417175,2.21875 C1.66547139,2.07291667 2.0218455,2.13023885 2.42329407,2.39071655 L9.0971295,8.03755188 Z" />
                         </svg>
                         {`${percentage}%`}
+                    </div>
+                </td>
+                <td className="px-5 py-5 border-b border-slate-700 text-sm">
+                    <div className="flex justify-center items-center">
+                        <svg onClick={(e) => { e.stopPropagation(); delBtnClick(); }} role="delete" className="inline h-16 w-16 p-6 transition-colors duration-100 ease-linear dark:fill-slate-400 dark:hover:fill-slate-200 hover:scale-110"
+                            viewBox="0 0 348.333 348.334" fill="none">
+                            <path d="M336.559,68.611L231.016,174.165l105.543,105.549c15.699,15.705,15.699,41.145,0,56.85
+		c-7.844,7.844-18.128,11.769-28.407,11.769c-10.296,0-20.581-3.919-28.419-11.769L174.167,231.003L68.609,336.563
+		c-7.843,7.844-18.128,11.769-28.416,11.769c-10.285,0-20.563-3.919-28.413-11.769c-15.699-15.698-15.699-41.139,0-56.85
+		l105.54-105.549L11.774,68.611c-15.699-15.699-15.699-41.145,0-56.844c15.696-15.687,41.127-15.687,56.829,0l105.563,105.554
+		L279.721,11.767c15.705-15.687,41.139-15.687,56.832,0C352.258,27.466,352.258,52.912,336.559,68.611z"/>
+                        </svg>
                     </div>
                 </td>
             </tr>
