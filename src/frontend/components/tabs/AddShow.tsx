@@ -72,7 +72,7 @@ export function AddShow({ pullDatabase }: { pullDatabase: Function }): JSX.Eleme
                     setShowPopup(true);
                     pullDatabase();
                 },
-                (error) => alert(error)
+                (error) => { alert(error); setIsAddingShow(false); }
             );
     }
 

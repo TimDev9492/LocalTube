@@ -90,6 +90,7 @@ export class DatabaseManager {
      */
     public static addShowToDatabase(localShow: LocalShow) {
         DatabaseManager.database.shows.push(localShow);
+        DatabaseManager.saveDatabase();
     }
 
     /**
@@ -100,7 +101,9 @@ export class DatabaseManager {
     public static deleteShowFromDatabase(showName: string): LocalShow {
         let indexToRemove = DatabaseManager.database.shows.findIndex((show) => show.metadata.title === showName);
         if (indexToRemove === -1) return null;
-        return DatabaseManager.database.shows.splice(indexToRemove, 1)[0];
+        const deleted = DatabaseManager.database.shows.splice(indexToRemove, 1)[0];
+        DatabaseManager.saveDatabase();
+        return deleted;
     }
 
     /**
