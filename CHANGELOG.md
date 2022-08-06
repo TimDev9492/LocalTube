@@ -2,6 +2,35 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0](https://github.com/TimDev9492/LocalTube/compare/v0.1.0...v1.0.0) (2022-08-06)
+
+
+### ⚠ BREAKING CHANGES
+
+* connect add show gui to database
+
+### Features
+
+* **api:** add route to delete show ([eedfbb7](https://github.com/TimDev9492/LocalTube/commit/eedfbb72acff378a3f97e1f5c516ec94188c8075))
+* connect add show gui to database ([fbce7ca](https://github.com/TimDev9492/LocalTube/commit/fbce7ca2836617baa7d6a5cc63e514774fe2a071))
+* finish show adding functionality ([b667f41](https://github.com/TimDev9492/LocalTube/commit/b667f41a154630af5f808687552255329267af4e))
+* **frontend:** add ability to switch between shows ([d4b4a30](https://github.com/TimDev9492/LocalTube/commit/d4b4a30cc1048789079a6c2df27aa61ee5925412))
+* **frontend:** add empty home page ([3097955](https://github.com/TimDev9492/LocalTube/commit/30979553511a745cc31176103d2bd9164948f408))
+* **frontend:** add gui components to delete show ([9804fae](https://github.com/TimDev9492/LocalTube/commit/9804faeb7140d29359a7d8ce4d4883543210a415))
+* **frontend:** add home tab ([f89de06](https://github.com/TimDev9492/LocalTube/commit/f89de067db7e5e87d655df1a292209f08d7afec8))
+* **frontend:** add JetBrains Mono font ([58f352f](https://github.com/TimDev9492/LocalTube/commit/58f352fb517c63c38738b2ac455e0d7bff3fb903))
+* **frontend:** extend add show tab ([ada2bc2](https://github.com/TimDev9492/LocalTube/commit/ada2bc28bf6ad81c9b5329f6234d4a1713978e91))
+
+
+### Bug Fixes
+
+* **backend:** fix ffmpeg/ffprobe binary not shipping with executable file permissions ([e869a12](https://github.com/TimDev9492/LocalTube/commit/e869a12495b7a5e1e36251daad5b6edfea8f3be8))
+* **backend:** fix serialization and deserialization of regex objects in database ([95935ea](https://github.com/TimDev9492/LocalTube/commit/95935ea641ffed327d43d06de8caab81b5946a48))
+* **backend:** fix serialization and deserialization of RegExp objects ([71b2554](https://github.com/TimDev9492/LocalTube/commit/71b25544b14c99489ca5c8ec42cfe984ee13d824))
+* **backend:** fix serialization of regex ([f1ab4d4](https://github.com/TimDev9492/LocalTube/commit/f1ab4d4f8e22d88a655bff36d6fd04a7aef5c903))
+* **backend:** guarantee a unique show name ([ee36485](https://github.com/TimDev9492/LocalTube/commit/ee364851ae23e8def3c696b44d21cd4e6dc635be))
+* write to database when adding/removing show ([c8cddeb](https://github.com/TimDev9492/LocalTube/commit/c8cddebc1ccc0bfe685c50f15d7ad8933c989e93))
+
 ## [0.1.0](https://github.com/TimDev9492/LocalTube/compare/v0.0.2...v0.1.0) (2022-08-02)
 
 
