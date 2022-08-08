@@ -13,16 +13,24 @@ You can find prebuilt binaries under [releases](https://github.com/TimDev9492/Lo
 
 ### Linux
 
+There are specific binaries for distributions based on Debian (`.deb`), as well as RedHat (`.rpm`).
+
+Alternatively, the AppImage should run on almost every Linux distribution.
+
 Download the AppImage and run it using
 ```sh
 ./path/to/downloaded.AppImage
 ```
 
-### Windows / MacOS
+### Windows
 
-Not yet availabe.
+Download the and run the `LocalTube-<version>.Setup.exe` file and follow the on-screen instructions (⚠ Hasn't been tested yet).
 
-### ⚠ Requirements
+### MacOS
+
+There is a `.dmg` binary available for download (⚠ Hasn't been tested yet).
+
+## ⚠ Requirements
 
 You need to have [mpv](https://mpv.io) installed on your system as its the video player that LocalTube uses to launch your videos.
 
@@ -30,9 +38,7 @@ You need to have [mpv](https://mpv.io) installed on your system as its the video
 
 ## Platform support
 
-LocalTube was built and tested on Linux. It should run fine on Windows, as well as on MacOS, but I haven't built the application for any of those operating systems, neither have I tested on any of them so far.
-
-Prebuilt binaries for Windows are planned for the near future...
+LocalTube was built and tested on Linux. It does however also run on Windows, as well as on MacOS, but I I haven't tested on any of those operating systems so far.
 
 ### Building from source
 
@@ -41,6 +47,15 @@ git clone https://github.com/TimDev9492/LocalTube.git   # clone github repositor
 cd LocalTube/
 npm install                                             # install dependecies
 npm run make                                            # build binaries
+```
+
+If you want to build a specific target application type (for example AppImage only), you can edit the `.config.forge.makers` section in the  `package.json` file ([instructions](https://www.electronforge.io/config/makers)) or run on of the following commands:
+```sh
+npm run make-appimage   # build AppImage
+npm run make-deb        # build for Debian-based linux distributions
+npm run make-rpm        # build RedHat-based linux distributions
+npm run make-dmg        # build for MacOS
+npm run make-win        # build for Windows
 ```
 
 ## Contributing

@@ -10,7 +10,13 @@
     "make": "electron-forge make",
     "release": "standard-version",
     "publish": "electron-forge publish",
-    "lint": "eslint --ext .ts,.tsx ."
+    "lint": "eslint --ext .ts,.tsx .",
+
+    "make-appimage": "electron-forge make --platform  linux --targets electron-forge-maker-appimage",
+    "make-deb": "electron-forge make --platform linux --targets @electron-forge/maker-deb",
+    "make-rpm": "electron-forge make --platform linux --targets @electron-forge/maker-rpm",
+    "make-dmg": "electron-forge make --platform darwin --targets @electron-forge/maker-dmg",
+    "make-win": "electron-forge make --platform win32 --targets @electron-forge/maker-squirrel"
   },
   "keywords": [],
   "author": {
