@@ -7,7 +7,7 @@
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
-    "make": "electron-forge make --platform linux --platform win32",
+    "make": "electron-forge make",
     "release": "standard-version",
     "publish": "source ./.env && electron-forge publish",
     "lint": "eslint --ext .ts,.tsx ."
@@ -52,7 +52,10 @@
           "name": "@electron-forge/maker-rpm",
           "config": {
             "options": {
-              "categories": ["AudioVideo", "Utility"],
+              "categories": [
+                "AudioVideo",
+                "Utility"
+              ],
               "description": "A cross-platform desktop application that simplifies watching your favorite movies and/or shows stored on your local drive with mpv.",
               "homepage": "https://github.com/TimDev9492/LocalTube",
               "icon": "./assets/localtube_icon.png",
@@ -112,6 +115,7 @@
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0-beta.64",
     "@electron-forge/maker-deb": "^6.0.0-beta.64",
+    "@electron-forge/maker-dmg": "^6.0.0-beta.65",
     "@electron-forge/maker-flatpak": "^6.0.0-beta.65",
     "@electron-forge/maker-rpm": "^6.0.0-beta.64",
     "@electron-forge/maker-squirrel": "^6.0.0-beta.64",
