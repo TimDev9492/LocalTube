@@ -1,13 +1,13 @@
 {
   "name": "localtube",
-  "productName": "localtube",
+  "productName": "LocalTube",
   "version": "1.0.0",
   "description": "Electron application to watch local video files with mpv",
   "main": ".webpack/main",
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
-    "make": "electron-forge make",
+    "make": "electron-forge make --platform linux --platform win32",
     "release": "standard-version",
     "publish": "source ./.env && electron-forge publish",
     "lint": "eslint --ext .ts,.tsx ."
@@ -20,7 +20,9 @@
   "license": "MIT",
   "config": {
     "forge": {
-      "packagerConfig": {},
+      "packagerConfig": {
+        "executableName": "localtube"
+      },
       "makers": [
         {
           "name": "electron-forge-maker-appimage",
@@ -28,6 +30,47 @@
             "categories": [
               "Video"
             ]
+          }
+        },
+        {
+          "name": "@electron-forge/maker-deb",
+          "config": {
+            "options": {
+              "categories": [
+                "AudioVideo",
+                "Utility"
+              ],
+              "description": "A cross-platform desktop application that simplifies watching your favorite movies and/or shows stored on your local drive with mpv.",
+              "homepage": "https://github.com/TimDev9492/LocalTube",
+              "icon": "./assets/localtube_icon.png",
+              "priority": "optional",
+              "section": "video"
+            }
+          }
+        },
+        {
+          "name": "@electron-forge/maker-rpm",
+          "config": {
+            "options": {
+              "categories": ["AudioVideo", "Utility"],
+              "description": "A cross-platform desktop application that simplifies watching your favorite movies and/or shows stored on your local drive with mpv.",
+              "homepage": "https://github.com/TimDev9492/LocalTube",
+              "icon": "./assets/localtube_icon.png",
+              "license": "MIT"
+            }
+          }
+        },
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "description": "A cross-platform desktop application that simplifies watching your favorite movies and/or shows stored on your local drive with mpv.",
+            "noMsi": false
+          }
+        },
+        {
+          "name": "@electron-forge/maker-dmg",
+          "config": {
+            "icon": "./assets/localtube_icon.png"
           }
         }
       ],
@@ -39,8 +82,7 @@
               "owner": "TimDev9492",
               "name": "LocalTube"
             },
-            "draft": true,
-            "prerelease": true
+            "draft": true
           }
         }
       ],
@@ -70,6 +112,7 @@
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0-beta.64",
     "@electron-forge/maker-deb": "^6.0.0-beta.64",
+    "@electron-forge/maker-flatpak": "^6.0.0-beta.65",
     "@electron-forge/maker-rpm": "^6.0.0-beta.64",
     "@electron-forge/maker-squirrel": "^6.0.0-beta.64",
     "@electron-forge/maker-zip": "^6.0.0-beta.64",
