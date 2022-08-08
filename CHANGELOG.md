@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.0](https://github.com/TimDev9492/LocalTube/compare/v1.0.0...v1.1.0) (2022-08-08)
+
+
+### ⚠ BREAKING CHANGES
+
+* add README.md
+
+### Features
+
+* **workflow:** implement github workflow to build and release application binaries ([b586cc6](https://github.com/TimDev9492/LocalTube/commit/b586cc65108b98ba3f2b67b13aef71cc89d4086b))
+
+
+### Bug Fixes
+
+* **backend:** resolve path of lua script correctly ([df04504](https://github.com/TimDev9492/LocalTube/commit/df04504c72d722943aff56020e08a27f6a2adee7)), closes [#1](https://github.com/TimDev9492/LocalTube/issues/1)
+
+
+* add README.md ([59157e7](https://github.com/TimDev9492/LocalTube/commit/59157e7c4426dc77dc14360ddbce93dc13a22a88))
+
 ## [1.0.0](https://github.com/TimDev9492/LocalTube/compare/v0.1.0...v1.0.0) (2022-08-06)
 
 
