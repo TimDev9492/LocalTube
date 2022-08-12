@@ -164,7 +164,7 @@ function ShowListEntry({ show, setPopupText, setPopupStyle, setShowPopup }: { sh
     }
 
     function getWatchTimeOfEpisode(episode: LocalVideo) {
-        return episode.metadata.duration - episode.metadata.timePos > settings.END_TIME_THRESHOLD ? episode.metadata.timePos : episode.metadata.duration;
+        return (episode.metadata.duration <= settings.END_TIME_THRESHOLD || episode.metadata.duration - episode.metadata.timePos > settings.END_TIME_THRESHOLD) ? episode.metadata.timePos : episode.metadata.duration;
     }
 
     function getWatchTimeOfSeason(seasonContent: { [episode: string]: LocalVideo }): number {
