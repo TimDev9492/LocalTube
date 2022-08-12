@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.5](https://github.com/TimDev9492/LocalTube/compare/v1.1.4...v1.1.5) (2022-08-12)
+
+
+### Bug Fixes
+
+* **backend:** fix mpv not launching on windows ([268fece](https://github.com/TimDev9492/LocalTube/commit/268fecec64464750fdbc8cb2c6a13ccb95a981d1))
+
 ### [1.1.4](https://github.com/TimDev9492/LocalTube/compare/v1.1.3...v1.1.4) (2022-08-12)
 
 
