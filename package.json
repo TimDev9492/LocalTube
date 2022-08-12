@@ -1,7 +1,7 @@
 {
   "name": "localtube",
   "productName": "LocalTube",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Electron application to watch local video files with mpv",
   "main": ".webpack/main",
   "scripts": {
@@ -11,7 +11,6 @@
     "release": "standard-version",
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx .",
-
     "make-appimage": "electron-forge make --platform  linux --targets electron-forge-maker-appimage",
     "make-deb": "electron-forge make --platform linux --targets @electron-forge/maker-deb",
     "make-rpm": "electron-forge make --platform linux --targets @electron-forge/maker-rpm",
