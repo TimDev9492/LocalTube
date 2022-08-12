@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.6](https://github.com/TimDev9492/LocalTube/compare/v1.1.5...v1.1.6) (2022-08-12)
+
+
+### Bug Fixes
+
+* **backend:** fix videos displaying as 100% finished when not longer than end time threshold value ([897b41d](https://github.com/TimDev9492/LocalTube/commit/897b41d1306f29810bfcfc7d1a6cc944a3566aba))
+
 ### [1.1.5](https://github.com/TimDev9492/LocalTube/compare/v1.1.4...v1.1.5) (2022-08-12)
 
 
