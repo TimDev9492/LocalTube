@@ -3,15 +3,54 @@
 
 <head>
   <meta charset="UTF-8" />
-  <title>Hello World!</title>
+  <title>LocalTube</title>
 
 </head>
 
 <body>
   <div id="app">
-    <h1>Hello Tailwind!</h1>
-    <p>Welcome to your Electron application.</p>
+    <div id="cover">
+      <h1 id="loading">Loading...</h1>
+    </div>
   </div>
 </body>
 
 </html>
+
+<style>
+  body {
+    margin: 0px;
+    padding: 0px;
+  }
+
+  #cover {
+    width: 100vw;
+    height: 100vh;
+    background-color: #334155;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  #loading {
+    text-align: center;
+    font-family: 'JetBrains Mono';
+    color: white;
+    font-size: 4rem;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0% {
+      opacity: 1;
+    }
+
+    50% {
+      opacity: 0.2;
+    }
+
+    100% {
+      opacity: 1;
+    }
+  }
+</style>

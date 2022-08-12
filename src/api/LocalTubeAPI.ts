@@ -5,6 +5,7 @@ import { FileConfig, LocalShow, LocalTubeDatabase } from "../backend/structure";
 declare global {
     interface Window {
         localtubeAPI: LocalTubeAPI;
+        ffmpegPaths: any;
     }
 }
 

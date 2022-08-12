@@ -34,12 +34,13 @@ VideoPlayer.setupMpv();
 const createWindow = (): void => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    height: 600,
-    width: 800,
+    height: 720,
+    width: 1280,
     webPreferences: {
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
     },
-    frame: false,
+    frame: true,
+    autoHideMenuBar: true,
   });
 
   // and load the index.html of the app.

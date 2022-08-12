@@ -3,8 +3,14 @@ import { PathLike } from "original-fs";
 import { FileConfig, LocalShow, LocalTubeDatabase } from "../backend/structure";
 import { handleDeleteShow, handleCheckShowName, handleAddShow, handleDebugGetDeserializedShow, handleGetRandomFileFromDir, handleCheckDirPath, handleOpenDialog, handleUpdateVideoTimePos, handleSignalMpvTimePosChange, handleOpenMpv, handleGetThumbnailBuffer, handleGetDatabase } from "./implementation";
 import { LocalTubeAPI } from "./LocalTubeAPI";
+import ffmpeg_bin from '@ffmpeg-installer/ffmpeg';
+import * as ffprobe_bin from 'ffprobe-static';
 
 export const buildAPI: Function = (): void => {
+    contextBridge.exposeInMainWorld('ffmpegPaths', {
+        ffmpeg: ffmpeg_bin.path,
+        ffprobe: ffprobe_bin.path,
+    })
     contextBridge.exposeInMainWorld('localtubeAPI', {
         getThumbnailBuffer: (path: PathLike, directPath: boolean): Promise<Buffer> => ipcRenderer.invoke('fs:getThumbnailBuffer', path, directPath),
         openDialog: (dialogOptions: OpenDialogOptions): Promise<string> => ipcRenderer.invoke('fs:openDialog', dialogOptions),

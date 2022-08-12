@@ -20,14 +20,21 @@
   },
   "keywords": [],
   "author": {
-    "name": "tim",
+    "name": "Tim",
     "email": "tim@timdev.de"
   },
   "license": "MIT",
   "config": {
     "forge": {
       "packagerConfig": {
-        "executableName": "localtube"
+        "executableName": "localtube",
+        "osxSign": {
+          "identity": "Developer ID Application: Felix Rieseberg (LT94ZKYDCJ)",
+          "hardened-runtime": true,
+          "entitlements": "entitlements.plist",
+          "entitlements-inherit": "entitlements.plist",
+          "signature-flags": "library"
+        }
       },
       "makers": [
         {
@@ -73,7 +80,12 @@
           "name": "@electron-forge/maker-squirrel",
           "config": {
             "description": "A cross-platform desktop application that simplifies watching your favorite movies and/or shows stored on your local drive with mpv.",
-            "noMsi": false
+            "noMsi": false,
+            "iconUrl": "https://raw.githubusercontent.com/TimDev9492/LocalTube/main/assets/localtube_icon.ico",
+            "loadingGif": "./assets/icon.gif",
+            "setupExe": "setup.exe",
+            "setupIcon": "./assets/localtube_icon.ico",
+            "setupMsi": "setup.msi"
           }
         },
         {
