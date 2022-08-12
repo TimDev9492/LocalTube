@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.3](https://github.com/TimDev9492/LocalTube/compare/v1.1.2...v1.1.3) (2022-08-12)
+
+
+### Bug Fixes
+
+* **backend:** fix ffmpeg timeout being too short ([9906791](https://github.com/TimDev9492/LocalTube/commit/9906791b0f48697014af62022152d91184cb4fc1))
+
 ### [1.1.2](https://github.com/TimDev9492/LocalTube/compare/v1.1.1...v1.1.2) (2022-08-12)
 
 ### [1.1.1](https://github.com/TimDev9492/LocalTube/compare/v1.1.0...v1.1.1) (2022-08-08)
