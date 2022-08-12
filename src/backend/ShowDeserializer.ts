@@ -7,7 +7,6 @@ import { app } from "electron";
 import * as child_process from "child_process";
 import * as ffmpeg from "fluent-ffmpeg";
 import * as commandExists from "command-exists";
-import { compareAsNumbers } from "../frontend/utils";
 
 /**
  * A class for serializing objects that are useable by the API
@@ -102,8 +101,8 @@ export class ShowDeserializer {
                 // let timeout = setTimeout(() => reject('timed out'), Math.min(videoDuration || 30000, 10000));
 
                 command.on('error', () => {
-                    reject(`Ffmpeg failed to create thumbnail for ${thumbnailPath}`);
-                })
+                    reject(`Ffmpeg failed to create thumbnail for ${absPath}`);
+                });
 
                 command.on('end', () => {
                     // clearTimeout(timeout);
@@ -259,8 +258,14 @@ export class ShowDeserializer {
                     console.error(error);
             });
         });
+        let thumbnailPath: PathLike;
+        try {
+            thumbnailPath = await ShowDeserializer.createVideoThubmnailJPEG(absPath, duration);
+        } catch {
+            thumbnailPath = '';
+        }
         return {
-            thumbnailPath: await ShowDeserializer.createVideoThubmnailJPEG(absPath, duration),
+            thumbnailPath: thumbnailPath,
             timePos: 0,
             duration: duration,
         } as LocalVideoMetadata;
