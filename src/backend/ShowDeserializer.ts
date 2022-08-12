@@ -98,11 +98,15 @@ export class ShowDeserializer {
                 });
 
                 // set a timeout proportional to video duration,
-                // at least 1000ms or 3000ms if no duration is given
-                let timeout = setTimeout(() => reject('timed out'), Math.min(videoDuration || 3000, 1000));
+                // at least 10.000ms or 30.000ms if no duration is given
+                // let timeout = setTimeout(() => reject('timed out'), Math.min(videoDuration || 30000, 10000));
+
+                command.on('error', () => {
+                    reject(`Ffmpeg failed to create thumbnail for ${thumbnailPath}`);
+                })
 
                 command.on('end', () => {
-                    clearTimeout(timeout);
+                    // clearTimeout(timeout);
                     resolve(thumbnailPath)
                 });
             });
