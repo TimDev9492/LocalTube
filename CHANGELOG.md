@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.4](https://github.com/TimDev9492/LocalTube/compare/v1.1.3...v1.1.4) (2022-08-12)
+
+
+### Bug Fixes
+
+* **backend:** continue if thumbnail didn't get created ([341b65c](https://github.com/TimDev9492/LocalTube/commit/341b65ce3929b17670444e66ffc1e4f66f37d087))
+
 ### [1.1.3](https://github.com/TimDev9492/LocalTube/compare/v1.1.2...v1.1.3) (2022-08-12)
 
 
