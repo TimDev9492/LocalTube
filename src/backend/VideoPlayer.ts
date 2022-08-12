@@ -1,9 +1,8 @@
 import { PathLike } from 'original-fs';
-import { app, WebContents } from 'electron';
+import { WebContents } from 'electron';
 import luaScript from '../../assets/localtube-timepos.lua';
 import * as child_process from 'child_process';
 import { DatabaseManager } from './DatabaseManager';
-import image from '../../assets/localtube_icon.png';
 import * as pathMod from 'path';
 
 /**
@@ -36,9 +35,11 @@ export class VideoPlayer {
      * @returns A boolean that tells if the player started successfully
      */
     public static openMpv(path: PathLike, startTime: number): void {
+        const execName = process.platform === 'win32' ? 'mpv.exe' : 'mpv';
+
         let luaPath = pathMod.join(__dirname, luaScript);
         let args = [path.toString(), `--script=${luaPath}`, `--start=${startTime}`];
-        let child = child_process.spawn('mpv', args);
+        let child = child_process.spawn(execName, args);
 
         // You can also use a variable to save the output for when the script closes later
         child.on('error', (error) => {
