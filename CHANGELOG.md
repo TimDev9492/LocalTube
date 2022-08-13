@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://github.com/TimDev9492/LocalTube/compare/v1.1.6...v1.2.0) (2022-08-13)
+
+
+### Bug Fixes
+
+* **backend:** fix video playing from start when shorter than one minute ([f1ab242](https://github.com/TimDev9492/LocalTube/commit/f1ab242405bf44cb90aefb96bc5719e1ac0be6a4))
+
 ### [1.1.6](https://github.com/TimDev9492/LocalTube/compare/v1.1.5...v1.1.6) (2022-08-12)
 
 
