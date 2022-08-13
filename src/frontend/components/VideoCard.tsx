@@ -23,7 +23,7 @@ export function VideoCard({ gridCol, video, episodeNo, activeVideoPath, setActiv
         let startTime = Math.max(timePos - settings.NEG_RESUME_OFFSET, 0);
 
         // if time left till end is smaller than END_TIME_TRESHOLD, start at the beginning
-        if (video.metadata.duration - timePos <= settings.END_TIME_THRESHOLD) startTime = 0;
+        if (video.metadata.duration > settings.END_TIME_THRESHOLD && video.metadata.duration - timePos <= settings.END_TIME_THRESHOLD) startTime = 0;
 
         // launch MPV
         window.localtubeAPI.openMpv(video.path, startTime);

@@ -130,7 +130,7 @@ export function AddShow({ pullDatabase }: { pullDatabase: Function }): JSX.Eleme
             </div>
             <div className="text-xl font-light text-slate-600 sm:text-2xl dark:text-white select-none flex flex-col w-11/12 max-w-7xl px-4 py-8 rounded-lg shadow dark:bg-slate-800 sm:px-6 md:px-8 lg:px-10">
                 <div className="self-center text-3xl">
-                    Add a show {window.ffmpegPaths.ffmpeg} {window.ffmpegPaths.ffprobe}
+                    Add a show
                 </div>
                 <div className="relative flex flex-col gap-4 justify-evenly mt-4 items-center px-48 py-4">
                     <div className="absolute border border-slate-600 w-full top-0"></div>
