@@ -24,7 +24,7 @@ Download the AppImage and run it using
 
 ### Windows
 
-Download the and run the `LocalTube-<version>.Setup.exe` file and follow the on-screen instructions (⚠ Hasn't been tested yet).
+Download the and run the `setup.exe` file.
 
 ### MacOS
 
@@ -32,7 +32,7 @@ There is a `.dmg` binary available for download (⚠ Hasn't been tested yet).
 
 ## ⚠ Requirements
 
-You need to have [mpv](https://mpv.io) installed on your system as its the video player that LocalTube uses to launch your videos.
+You need to have [mpv](https://mpv.io) installed on your system (and added to your PATH) as its the video player that LocalTube uses to launch your videos.
 
 [ffmpegthumbnailer](https://github.com/dirkvdb/ffmpegthumbnailer) is recommended for faster video thumbnail generation, but not required.
 
