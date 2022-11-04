@@ -38,7 +38,7 @@ You need to have [mpv](https://mpv.io) installed on your system (and added to yo
 
 ## Platform support
 
-LocalTube was built and tested on Linux. It does however also run on Windows, as well as on MacOS, but I I haven't tested on any of those operating systems so far.
+LocalTube was built and tested on Linux. It does however also run on Windows, as well as on MacOS, but I haven't tested on any of those operating systems so far.
 
 ### Building from source
 
@@ -49,7 +49,7 @@ npm install                                             # install dependecies
 npm run make                                            # build binaries
 ```
 
-If you want to build a specific target application type (for example AppImage only), you can edit the `.config.forge.makers` section in the  `package.json` file ([instructions](https://www.electronforge.io/config/makers)) or run on of the following commands:
+If you want to build a specific target application type (for example AppImage only), you can edit the `.config.forge.makers` section in the  `package.json` file ([instructions](https://www.electronforge.io/config/makers)) or run one of the following commands:
 ```sh
 npm run make-appimage   # build AppImage
 npm run make-deb        # build for Debian-based linux distributions
