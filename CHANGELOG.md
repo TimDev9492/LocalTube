@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.2](https://github.com/TimDev9492/LocalTube/compare/v1.2.1...v1.2.2) (2024-06-02)
+
+
+### Bug Fixes
+
+* **release:** install missing dependency to build dmg on macos ([7278ae8](https://github.com/TimDev9492/LocalTube/commit/7278ae822b6f31bda53bba1aab4c4c8997955a83))
+
 ### [1.2.1](https://github.com/TimDev9492/LocalTube/compare/v1.2.0...v1.2.1) (2024-06-02)
 
 
