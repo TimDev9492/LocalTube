@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.3](https://github.com/TimDev9492/LocalTube/compare/v1.2.0...v1.1.3) (2024-06-02)
+
+
+### Bug Fixes
+
+* **backend:** fix mpv not transmitting timepos correctly ([f02750c](https://github.com/TimDev9492/LocalTube/commit/f02750c333d75586526d3045efc0e1f4a20f010b))
+* fix typos in README.md ([76a3188](https://github.com/TimDev9492/LocalTube/commit/76a318872c4ca97b867e2199342f4b43db8cb0c2))
+
 ### [1.1.2](https://github.com/TimDev9492/LocalTube/compare/v1.2.0...v1.1.2) (2022-08-26)
 
 ## [1.2.0](https://github.com/TimDev9492/LocalTube/compare/v1.1.6...v1.2.0) (2022-08-13)
