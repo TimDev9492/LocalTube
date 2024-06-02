@@ -1,7 +1,7 @@
 {
   "name": "localtube",
   "productName": "LocalTube",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "description": "Electron application to watch local video files with mpv",
   "main": ".webpack/main",
   "scripts": {
