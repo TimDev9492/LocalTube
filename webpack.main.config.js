@@ -30,7 +30,6 @@ module.exports = {
     //   ]
     // })
     new WebpackShellPluginNext({
-
       onBuildEnd: {
         scripts: [
           'chmod +x .webpack/main/native_modules/ffmpeg',

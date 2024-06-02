@@ -147,6 +147,7 @@ export class ShowDeserializer {
                 let season: string;
                 let episode: string;
                 let title: string;
+                let properTitle: boolean = false;
 
                 if (!regexMatches || !regexMatches.length) {
                     season = '01';
@@ -168,13 +169,15 @@ export class ShowDeserializer {
                     }
 
                     // set title
-                    if (fileConfig.regExtract.matchingGroups.title < regexMatches.length)
+                    if (fileConfig.regExtract.matchingGroups.title < regexMatches.length && regexMatches[fileConfig.regExtract.matchingGroups.title]) {
                         title = regexMatches[fileConfig.regExtract.matchingGroups.title];
-                    else
+                        properTitle = true;
+                    } else {
                         title = path.basename(videoFile.relativePath.toString());
+                    }
                 }
 
-                if (fileConfig.regExtract.titleReplace) title = title.replace(fileConfig.regExtract.titleReplace.searchValue, fileConfig.regExtract.titleReplace.replaceValue);
+                if (fileConfig.regExtract.titleReplace && properTitle) title = title.replace(fileConfig.regExtract.titleReplace.searchValue, fileConfig.regExtract.titleReplace.replaceValue);
 
                 if (!content[season]) content[season] = {} as LocalSeason;
 
