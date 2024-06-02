@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.4](https://github.com/TimDev9492/LocalTube/compare/v1.2.3...v1.2.4) (2024-06-02)
+
+
+### Bug Fixes
+
+* **release:** change macos build platform to darwin ([70d73a3](https://github.com/TimDev9492/LocalTube/commit/70d73a3807132239920b7dc1f1ced2b678e49a1a))
+
 ### [1.2.3](https://github.com/TimDev9492/LocalTube/compare/v1.2.2...v1.2.3) (2024-06-02)
 
 
