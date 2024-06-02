@@ -52,12 +52,16 @@ export class VideoPlayer {
             // stdout
             console.log('stdout', data);
 
+            // get rid of whitespace
+            data = data.trim();
+
             // extract timepos update information from stdout
             if (data.startsWith('[localtube_timepos] ')) {
                 let timeposStr = data.replace('[localtube_timepos] ', '');
                 let timepos = parseFloat(timeposStr);
                 if (timepos === null || Number.isNaN(timepos)) return;
                 VideoPlayer.webListeners.forEach(webContents => webContents.send('mpv:update-timepos', timepos, path));
+                console.log('TIMEPOS: ', timepos);
                 DatabaseManager.updateVideoTimePos(path, timepos);
             }
         });
