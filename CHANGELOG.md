@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.6](https://github.com/TimDev9492/LocalTube/compare/v1.2.5...v1.2.6) (2025-09-03)
+
+
+### Bug Fixes
+
+* treat symbolic links to video files as video files ([f120d05](https://github.com/TimDev9492/LocalTube/commit/f120d0515ac7b4f95ffdc087805d50b56bfc86fc))
+
 ### [1.2.5](https://github.com/TimDev9492/LocalTube/compare/v1.2.4...v1.2.5) (2024-06-02)
 
 
