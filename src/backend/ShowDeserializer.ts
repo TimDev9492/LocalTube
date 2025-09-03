@@ -303,13 +303,15 @@ export class ShowDeserializer {
                 }
 
                 // ...get the contents as specified by the FileConfig...
+                const rawContents = await fsPromises.readdir(nextDirPath, { withFileTypes: true });
                 let dirContents = (await fsPromises.readdir(nextDirPath, { withFileTypes: true })).filter(dirent =>
                     (!fileConfig.ignoreSubDirs && dirent.isDirectory()) ||
                     (!fileConfig.fileExtensions.length || fileConfig.fileExtensions.includes(ShowDeserializer.getFileExtension(dirent.name))));
 
                 // ...push video files to videoFiles array and put directories into next queue...
                 for (const dirent of dirContents) {
-                    if (dirent.isFile()) {
+                    const isFile = dirent.isFile() || (dirent.isSymbolicLink() && (await fsPromises.stat(path.join(nextDirPath, dirent.name))).isFile());
+                    if (isFile) {
                         // check if file is a video file
                         let isVideoFile = await new Promise<boolean>((resolve, reject) => {
                             ffmpeg.ffprobe(path.join(dirPath.toString(), relDirPath.toString(), dirent.name).toString(), (error: any, metadata: any) => {
