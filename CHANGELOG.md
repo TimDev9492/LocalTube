@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.7](https://github.com/TimDev9492/LocalTube/compare/v1.2.6...v1.2.7) (2025-09-21)
+
+
+### Bug Fixes
+
+* update macos version for github runner ([0524621](https://github.com/TimDev9492/LocalTube/commit/05246215f7afcaabb07a2c652fb15db52f746d0b))
+
 ### [1.2.6](https://github.com/TimDev9492/LocalTube/compare/v1.2.5...v1.2.6) (2025-09-03)
 
 
